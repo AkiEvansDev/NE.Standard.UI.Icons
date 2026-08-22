@@ -1,0 +1,11 @@
+{
+  "name": "@ne-standard/ui-web-icons-lucide",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-icons.mjs"
+  },
+  "devDependencies": {
+    "@lucide/icons": "1.18.0"
+  }
+}

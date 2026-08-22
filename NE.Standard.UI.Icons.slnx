@@ -1,0 +1,23 @@
+<!-- Copied to the mirror's root as NE.Standard.UI.Icons.slnx; its paths only resolve there, not from here. -->
+<Solution>
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <Project Path="src/NE.Standard.UI.Icons.Lucide/NE.Standard.UI.Icons.Lucide.csproj" />
+    <Project Path="src/NE.Standard.UI.Web.Icons.Lucide/NE.Standard.UI.Web.Icons.Lucide.csproj" />
+  </Folder>
+
+  <Folder Name="/examples/">
+    <Project Path="examples/DemoApp.Icons/DemoApp.Icons.csproj" />
+  </Folder>
+
+  <Folder Name="/solution/">
+    <File Path=".editorconfig" />
+    <File Path="global.json" />
+    <File Path="Directory.Build.props" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="CHANGELOG.md" />
+  </Folder>
+</Solution>

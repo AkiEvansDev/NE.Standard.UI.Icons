@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>NE.Standard.UI.Icons.Lucide</PackageId>
+    <Description>The Lucide icon names, as constants an NE.Standard UI component can be given: a curated table of semantic names over Lucide's slugs. Platform-independent - the rendering lives in the platform's own icon package. MIT, unlike the framework it plugs into.</Description>
+    <PackageTags>NE.Standard,UI,Icons,Lucide</PackageTags>
+  </PropertyGroup>
+
+</Project>

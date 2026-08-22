@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>NE.Standard.UI.Web.Icons.Lucide</PackageId>
+    <Description>The Lucide icon set rendered for the NE.Standard UI web platform: the generated stylesheet ships embedded in the assembly and registers itself with the host. MIT, unlike the framework it plugs into.</Description>
+    <PackageTags>NE.Standard,UI,Web,Icons,Lucide</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NE.Standard.UI.Icons.Lucide\NE.Standard.UI.Icons.Lucide.csproj" />
+  </ItemGroup>
+
+  <!-- The framework is a sibling in the monorepo and a package in this slice's mirror. Either way the
+       produced nupkg depends on NE.Standard.UI.Web.Abstractions at $(CoreVersion). -->
+  <ItemGroup Condition="'$(InMonorepo)' == 'true'">
+    <ProjectReference Include="..\..\..\..\src\Platforms\Web\NE.Standard.UI.Web.Abstractions\NE.Standard.UI.Web.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(InMonorepo)' != 'true'">
+    <PackageReference Include="NE.Standard.UI.Web.Abstractions" Version="$(CoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Client\dist\ui-icons-lucide.css" />
+    <Content Remove="Client\dist\ui-icons-lucide.css" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <LucideIconCss>$(MSBuildProjectDirectory)\Client\dist\ui-icons-lucide.css</LucideIconCss>
+  </PropertyGroup>
+
+  <Target Name="BuildLucideIconAssets" BeforeTargets="PrepareResources" Condition="'$(SkipWebIconBuild)' != 'true'">
+    <Exec
+      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
+      Command="npm install"
+      Condition="!Exists('$(MSBuildProjectDirectory)\Client\node_modules')" />
+
+    <Exec
+      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
+      Command="npm run build" />
+
+    <Error Condition="!Exists('$(LucideIconCss)')" Text="Lucide icon CSS was not generated: $(LucideIconCss)" />
+  </Target>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(LucideIconCss)" LogicalName="NE.Standard.UI.Web.Icons.Lucide.Client.dist.ui-icons-lucide.css" />
+  </ItemGroup>
+
+</Project>

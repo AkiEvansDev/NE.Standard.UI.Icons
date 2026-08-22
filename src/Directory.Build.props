@@ -1,0 +1,29 @@
+<Project>
+
+  <!-- MSBuild stops at the first Directory.Build.props it finds, so the repository-wide one is pulled in by
+       hand. The search starts one level above this file so that it lands on the repository root here and on
+       the mirror's root there, where this slice's src/ sits directly under it. -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Version>$(IconsVersion)</Version>
+
+    <Authors>Aki Evans</Authors>
+    <Copyright>Copyright (c) 2026 Aki Evans</Copyright>
+    <!-- This slice's own mirror, not the framework's. -->
+    <PackageProjectUrl>https://github.com/AkiEvansDev/NE.Standard.UI.Icons</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AkiEvansDev/NE.Standard.UI.Icons</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+    <!-- MIT, not the framework's Prosperity: an icon table is a table of names, and there is no reason for
+         it to carry a licence anyone has to read. OSI-approved, so it travels as an expression. -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+</Project>
