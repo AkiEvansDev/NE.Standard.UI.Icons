@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>NE.Standard.UI.Web.Icons.Lucide</PackageId>
-    <Description>The Lucide icon set rendered for the NE.Standard UI web platform: the generated stylesheet ships embedded in the assembly and registers itself with the host. MIT, unlike the framework it plugs into.</Description>
+    <Description>DEPRECATED. Lucide for the NE.Standard UI web platform, drawing its glyphs as CSS masks over an embedded table. The Material pack moved to a variable font on 2026-09-02 and reads visibly better at 14 and 16 pixels; Lucide ships no font of its own, so this pack is frozen rather than followed. Use NE.Standard.UI.Web.Icons.Material. MIT, unlike the framework it plugs into.</Description>
     <PackageTags>NE.Standard,UI,Web,Icons,Lucide</PackageTags>
   </PropertyGroup>
 
@@ -25,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Client\dist\ui-icons-lucide.css" />
-    <Content Remove="Client\dist\ui-icons-lucide.css" />
+    <None Remove="Client\dist\**" />
+    <Content Remove="Client\dist\**" />
   </ItemGroup>
 
   <PropertyGroup>
-    <LucideIconCss>$(MSBuildProjectDirectory)\Client\dist\ui-icons-lucide.css</LucideIconCss>
+    <LucideIconTable>$(MSBuildProjectDirectory)\Client\dist\ui-icons-lucide.deflate</LucideIconTable>
   </PropertyGroup>
 
   <Target Name="BuildLucideIconAssets" BeforeTargets="PrepareResources" Condition="'$(SkipWebIconBuild)' != 'true'">
@@ -43,11 +43,11 @@
       WorkingDirectory="$(MSBuildProjectDirectory)\Client"
       Command="npm run build" />
 
-    <Error Condition="!Exists('$(LucideIconCss)')" Text="Lucide icon CSS was not generated: $(LucideIconCss)" />
+    <Error Condition="!Exists('$(LucideIconTable)')" Text="Lucide glyph table was not generated: $(LucideIconTable)" />
   </Target>
 
   <ItemGroup>
-    <EmbeddedResource Include="$(LucideIconCss)" LogicalName="NE.Standard.UI.Web.Icons.Lucide.Client.dist.ui-icons-lucide.css" />
+    <EmbeddedResource Include="$(LucideIconTable)" LogicalName="NE.Standard.UI.Web.Icons.Lucide.Client.dist.ui-icons-lucide.deflate" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,12 @@
 {
-  "name": "@ne-standard/ui-web-icons-lucide",
+  "name": "@ne-standard/ui-web-icons-material",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build-icons.mjs"
   },
   "devDependencies": {
-    "@lucide/icons": "1.39.0"
+    "material-symbols": "0.47.0",
+    "subset-font": "2.7.0"
   }
 }

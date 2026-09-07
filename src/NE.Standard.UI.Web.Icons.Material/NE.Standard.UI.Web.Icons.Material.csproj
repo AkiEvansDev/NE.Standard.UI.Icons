@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>NE.Standard.UI.Web.Icons.Material</PackageId>
+    <Description>Material Symbols Rounded for the NE.Standard UI web platform. One 382 KB variable font ships embedded — every glyph, with FILL and the optical size still axes — and the stylesheet is built at startup from the glyphs the application registers. MIT, unlike the framework it plugs into; the font itself is Apache-2.0.</Description>
+    <PackageTags>NE.Standard,UI,Web,Icons,Material</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NE.Standard.UI.Icons.Material\NE.Standard.UI.Icons.Material.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(InMonorepo)' == 'true'">
+    <ProjectReference Include="..\..\..\..\src\Platforms\Web\NE.Standard.UI.Web.Abstractions\NE.Standard.UI.Web.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(InMonorepo)' != 'true'">
+    <PackageReference Include="NE.Standard.UI.Web.Abstractions" Version="$(CoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Client\dist\**" />
+    <Content Remove="Client\dist\**" />
+  </ItemGroup>
+
+  <!-- Apache-2.0 clause 4 wants the licence text to travel with what it covers, so the font's does. -->
+  <ItemGroup>
+    <None Include="THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\" />
+    <None Include="LICENSE-material-symbols.txt" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <MaterialIconFont>$(MSBuildProjectDirectory)\Client\dist\ui-icons-material.woff2</MaterialIconFont>
+  </PropertyGroup>
+
+  <Target Name="BuildMaterialIconAssets" BeforeTargets="PrepareResources" Condition="'$(SkipWebIconBuild)' != 'true'">
+    <Exec
+      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
+      Command="npm install"
+      Condition="!Exists('$(MSBuildProjectDirectory)\Client\node_modules')" />
+
+    <Exec
+      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
+      Command="npm run build" />
+
+    <Error Condition="!Exists('$(MaterialIconFont)')" Text="Material icon font was not generated: $(MaterialIconFont)" />
+  </Target>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(MaterialIconFont)" LogicalName="NE.Standard.UI.Web.Icons.Material.Client.dist.ui-icons-material.woff2" />
+  </ItemGroup>
+
+</Project>

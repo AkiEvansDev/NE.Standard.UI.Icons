@@ -10,6 +10,6 @@ internal sealed class IconsAppStartup : UIStartupBase
     {
         ArgumentNullException.ThrowIfNull(application);
 
-        _ = application.Route<LucideView>("/");
+        _ = application.Route<IconsView, IconsController>("/");
     }
 }

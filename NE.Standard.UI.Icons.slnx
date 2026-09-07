@@ -4,6 +4,8 @@
     <File Path="src/Directory.Build.props" />
     <Project Path="src/NE.Standard.UI.Icons.Lucide/NE.Standard.UI.Icons.Lucide.csproj" />
     <Project Path="src/NE.Standard.UI.Web.Icons.Lucide/NE.Standard.UI.Web.Icons.Lucide.csproj" />
+    <Project Path="src/NE.Standard.UI.Icons.Material/NE.Standard.UI.Icons.Material.csproj" />
+    <Project Path="src/NE.Standard.UI.Web.Icons.Material/NE.Standard.UI.Web.Icons.Material.csproj" />
   </Folder>
 
   <Folder Name="/examples/">

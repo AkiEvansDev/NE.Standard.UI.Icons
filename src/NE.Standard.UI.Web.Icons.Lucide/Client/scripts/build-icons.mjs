@@ -1,396 +1,48 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+// Builds the Lucide pack: a compressed glyph table for the assembly to embed, and the C# name constants
+// beside it. Every name the set draws, not a curated hundred — which of them reaches a browser is what the
+// application registers.
+//
+// Nothing here writes a stylesheet. 1 715 glyphs is about 700 KB of CSS, and an application draws tens of
+// them; the host builds the CSS at startup from the glyphs that were asked for.
+
+import { deflateRawSync } from "node:zlib";
+import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
-import {
-    // Actions
 
-    Plus, Minus, X, Check, Ban,
-    Pencil, Trash2, Save, Copy,
-    Undo2, Redo2, RefreshCw,
+const SOURCE = "node_modules/@lucide/icons/dist/esm/icons";
+const DIST = "dist";
+const NAMES = "../../NE.Standard.UI.Icons.Lucide/LucideIcons.cs";
 
-    // Navigation
+// Reserved words a glyph name would collide with as a C# identifier. Everything else PascalCases cleanly.
+const RESERVED = new Set(["Class", "Object", "String", "Double", "Switch", "Lock", "Default", "Event", "Base", "Checked", "Void"]);
 
-    ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ArrowUpDown,
-    ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
-    Expand, Shrink, Maximize2, Minimize2,
-    ExternalLink, Link,
+// The `icons` directory is the canonical set: the barrel adds several thousand alias exports on top, all of
+// them pointing at these same drawings.
+async function read() {
+    const files = readdirSync(SOURCE).filter(file => file.endsWith(".mjs") && file !== "index.mjs").sort();
+    const table = {};
 
-    // Search & Filter
+    for (const file of files) {
+        const name = file.slice(0, -".mjs".length);
+        const { default: icon } = await import(pathToFileURL(resolve(SOURCE, file)).href);
 
-    Search, SearchX, SearchCheck,
-    Filter, FilterX,
-    Funnel, SlidersHorizontal, ListFilter,
+        if (!icon || !Array.isArray(icon.node))
+            throw new Error(`Lucide icon '${name}' has no node data.`);
 
-    // Status
+        table[name] = encodeSvg(renderIcon(icon));
+    }
 
-    Info, TriangleAlert, CircleX, CircleCheck, CircleHelp,
-    AlertCircle, CircleAlert,
-    LoaderCircle, CircleDashed,
-    BadgeCheck, BadgeX,
+    return table;
+}
 
-    // Selection
-
-    CheckCheck,
-    Circle, CircleDot,
-    Square, SquareCheck, SquareX,
-    PlusCircle, MinusCircle,
-
-    // Files
-
-    File, FileText, Files,
-    FileInput, FileOutput, FileSearch,
-    Folder, FolderOpen, FolderSearch,
-    Image, Paperclip,
-    Upload, Download,
-
-    // Time
-
-    Calendar, Clock, History,
-
-    // Users & Security
-
-    User, UserRound, UserCheck, UserX,
-    Users,
-    Lock, LockOpen,
-    Key, Fingerprint,
-    Shield,
-
-    // Visibility
-
-    Eye, EyeOff,
-
-    // Communication
-
-    Mail, Phone, MessageSquare, Bell,
-    Send, Inbox,
-
-    // Media
-
-    Play, Pause,
-
-    // Layout
-
-    Menu,
-    PanelLeft, PanelRight, PanelTop, PanelBottom,
-    Sidebar,
-    Rows3, Columns3, Grid3X3,
-    Table, List, ListChecks,
-    LayoutDashboard,
-
-    // Charts
-
-    ChartBar, ChartLine, ChartPie,
-
-    // Data
-
-    Database, Server,
-
-    // Network
-
-    Globe, Wifi, WifiOff,
-
-    // Auth
-
-    LogIn, LogOut,
-
-    // Packages
-
-    Package, Archive, Boxes,
-
-    // Clipboard
-
-    Clipboard, ClipboardCheck, ClipboardX,
-
-    // Development
-
-    Code, Terminal, Bug, Wrench,
-
-    // Locations
-
-    MapPin, Navigation,
-
-    // Commerce
-
-    CreditCard, Wallet,
-
-    // Devices
-
-    Monitor, Smartphone, Tablet,
-
-    // Appearance
-
-    Settings, Settings2,
-    Palette, Languages,
-    Sun, Moon,
-
-    // Misc
-
-    House,
-    Ellipsis, EllipsisVertical,
-    Bookmark, Tag,
-    Heart, Star, Sparkles,
-    Printer
-} from "@lucide/icons";
-
-const icons = {
-    // Actions
-
-    "plus": Plus,
-    "minus": Minus,
-    "x": X,
-    "check": Check,
-    "ban": Ban,
-
-    "pencil": Pencil,
-    "trash-2": Trash2,
-    "save": Save,
-    "copy": Copy,
-
-    "undo-2": Undo2,
-    "redo-2": Redo2,
-    "refresh-cw": RefreshCw,
-
-    // Navigation
-
-    "arrow-up": ArrowUp,
-    "arrow-down": ArrowDown,
-    "arrow-left": ArrowLeft,
-    "arrow-right": ArrowRight,
-    "arrow-up-down": ArrowUpDown,
-
-    "chevron-up": ChevronUp,
-    "chevron-down": ChevronDown,
-    "chevron-left": ChevronLeft,
-    "chevron-right": ChevronRight,
-
-    "expand": Expand,
-    "shrink": Shrink,
-    "maximize-2": Maximize2,
-    "minimize-2": Minimize2,
-
-    "external-link": ExternalLink,
-    "link": Link,
-
-    // Search & Filter
-
-    "search": Search,
-    "search-x": SearchX,
-    "search-check": SearchCheck,
-
-    "filter": Filter,
-    "filter-x": FilterX,
-
-    "funnel": Funnel,
-    "sliders-horizontal": SlidersHorizontal,
-    "list-filter": ListFilter,
-
-    // Status
-
-    "info": Info,
-    "triangle-alert": TriangleAlert,
-    "circle-x": CircleX,
-    "circle-check": CircleCheck,
-    "circle-help": CircleHelp,
-
-    "alert-circle": AlertCircle,
-    "circle-alert": CircleAlert,
-
-    "loader-circle": LoaderCircle,
-    "circle-dashed": CircleDashed,
-
-    "badge-check": BadgeCheck,
-    "badge-x": BadgeX,
-
-    // Selection
-
-    "check-check": CheckCheck,
-
-    "circle": Circle,
-    "circle-dot": CircleDot,
-
-    "square": Square,
-    "square-check": SquareCheck,
-    "square-x": SquareX,
-
-    "plus-circle": PlusCircle,
-    "minus-circle": MinusCircle,
-
-    // Files
-
-    "file": File,
-    "file-text": FileText,
-    "files": Files,
-
-    "file-input": FileInput,
-    "file-output": FileOutput,
-    "file-search": FileSearch,
-
-    "folder": Folder,
-    "folder-open": FolderOpen,
-    "folder-search": FolderSearch,
-
-    "image": Image,
-    "paperclip": Paperclip,
-
-    "upload": Upload,
-    "download": Download,
-
-    // Time
-
-    "calendar": Calendar,
-    "clock": Clock,
-    "history": History,
-
-    // Users & Security
-
-    "user": User,
-    "user-round": UserRound,
-    "user-check": UserCheck,
-    "user-x": UserX,
-
-    "users": Users,
-
-    "lock": Lock,
-    "lock-open": LockOpen,
-
-    "key": Key,
-    "fingerprint": Fingerprint,
-
-    "shield": Shield,
-
-    // Visibility
-
-    "eye": Eye,
-    "eye-off": EyeOff,
-
-    // Communication
-
-    "mail": Mail,
-    "phone": Phone,
-    "message-square": MessageSquare,
-    "bell": Bell,
-
-    "send": Send,
-    "inbox": Inbox,
-
-    // Media
-
-    "play": Play,
-    "pause": Pause,
-
-    // Layout
-
-    "menu": Menu,
-
-    "panel-left": PanelLeft,
-    "panel-right": PanelRight,
-    "panel-top": PanelTop,
-    "panel-bottom": PanelBottom,
-
-    "sidebar": Sidebar,
-
-    "rows-3": Rows3,
-    "columns-3": Columns3,
-    "grid-3x3": Grid3X3,
-
-    "table": Table,
-    "list": List,
-    "list-checks": ListChecks,
-
-    "layout-dashboard": LayoutDashboard,
-
-    // Charts
-
-    "chart-bar": ChartBar,
-    "chart-line": ChartLine,
-    "chart-pie": ChartPie,
-
-    // Data
-
-    "database": Database,
-    "server": Server,
-
-    // Network
-
-    "globe": Globe,
-    "wifi": Wifi,
-    "wifi-off": WifiOff,
-
-    // Auth
-
-    "log-in": LogIn,
-    "log-out": LogOut,
-
-    // Packages
-
-    "package": Package,
-    "archive": Archive,
-    "boxes": Boxes,
-
-    // Clipboard
-
-    "clipboard": Clipboard,
-    "clipboard-check": ClipboardCheck,
-    "clipboard-x": ClipboardX,
-
-    // Development
-
-    "code": Code,
-    "terminal": Terminal,
-    "bug": Bug,
-    "wrench": Wrench,
-
-    // Locations
-
-    "map-pin": MapPin,
-    "navigation": Navigation,
-
-    // Commerce
-
-    "credit-card": CreditCard,
-    "wallet": Wallet,
-
-    // Devices
-
-    "monitor": Monitor,
-    "smartphone": Smartphone,
-    "tablet": Tablet,
-
-    // Appearance
-
-    "settings": Settings,
-    "settings-2": Settings2,
-
-    "palette": Palette,
-    "languages": Languages,
-
-    "sun": Sun,
-    "moon": Moon,
-
-    // Misc
-
-    "house": House,
-
-    "ellipsis": Ellipsis,
-    "ellipsis-vertical": EllipsisVertical,
-
-    "bookmark": Bookmark,
-    "tag": Tag,
-
-    "heart": Heart,
-    "star": Star,
-    "sparkles": Sparkles,
-
-    "printer": Printer
-};
-
+// No `width`/`height`, only the `viewBox`. A glyph is drawn as a CSS mask sized `contain`, and an SVG that
+// states a size has an *intrinsic* one: the browser rasterises it at 24px and scales that bitmap to whatever
+// box the icon got, which is where the softness at larger sizes came from. Sizeless, the mask is rasterised at
+// the box and the glyph is sharp at every size.
 function renderIcon(icon) {
-    if (!icon || !Array.isArray(icon.node))
-        throw new Error("Invalid Lucide icon data.");
-
     const attributes = {
         xmlns: "http://www.w3.org/2000/svg",
-        width: "24",
-        height: "24",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -408,36 +60,87 @@ function renderIconNode(node) {
     return `<${tag} ${renderAttributes(attributes)} />`;
 }
 
+// `key` is React bookkeeping that ships with the icon data and means nothing in an SVG; it was a third of
+// what each glyph cost once percent-encoded.
 function renderAttributes(attributes) {
     return Object.entries(attributes)
-        .map(([key, value]) => `${key}="${escapeHtml(String(value))}"`)
+        .filter(([key]) => key !== "key")
+        .map(([key, value]) => `${key}='${escapeAttribute(String(value))}'`)
         .join(" ");
 }
 
-function escapeHtml(value) {
+// Single-quoted attributes, so the double quote that closes the CSS string is the only one in play and no
+// attribute value ever needs escaping for it. `&` and `<` still have to go — the file is parsed as XML.
+function escapeAttribute(value) {
     return value
         .replaceAll("&", "&amp;")
-        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&apos;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;");
 }
 
-function toDataUri(svg) {
-    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+// Not encodeURIComponent: inside `url("…")` every character but the closing quote, a backslash and a newline
+// is already legal, so escaping spaces, slashes, angle brackets and equals signs only made the file bigger.
+// `%` has to lead the list — it is the escape character itself.
+function encodeSvg(svg) {
+    return svg
+        .replaceAll("%", "%25")
+        .replaceAll("#", "%23")
+        .replaceAll("\"", "%22")
+        .replaceAll("\n", "");
 }
 
-const lines = [
-    "/* Generated Lucide icon pack for NE.Standard.UI.Web. */",
-    ""
-];
+function toIdentifier(name) {
+    const pascal = name
+        .split(/[_-]+/)
+        .filter(part => part.length > 0)
+        .map(part => part[0].toUpperCase() + part.slice(1))
+        .join("");
 
-for (const [name, icon] of Object.entries(icons)) {
-    if (!icon)
-        throw new Error(`Lucide icon '${name}' was not imported correctly.`);
+    const safe = /^[0-9]/.test(pascal) ? "N" + pascal : pascal;
 
-    lines.push(`.ui-icon-glyph--${name} { --ui-icon-url: ${toDataUri(renderIcon(icon))}; }`);
+    return RESERVED.has(safe) ? safe + "Icon" : safe;
 }
 
-const dist = resolve("dist");
-mkdirSync(dist, { recursive: true });
-writeFileSync(resolve(dist, "ui-icons-lucide.css"), lines.join("\n"), "utf8");
+const table = await read();
+
+mkdirSync(DIST, { recursive: true });
+
+const json = Buffer.from(JSON.stringify(table), "utf8");
+// Raw deflate, not zlib-wrapped: .NET DeflateStream reads exactly this, and the wrapper it does not.
+const packed = deflateRawSync(json, { level: 9 });
+
+writeFileSync(resolve(DIST, "ui-icons-lucide.deflate"), packed);
+console.log(`glyphs: ${Object.keys(table).length}, ${(json.length / 1024).toFixed(0)} KB -> ${(packed.length / 1024).toFixed(0)} KB`);
+
+const seen = new Map();
+const lines = [];
+
+for (const name of Object.keys(table)) {
+    const identifier = toIdentifier(name);
+
+    if (seen.has(identifier))
+        throw new Error(`Identifier '${identifier}' is produced by both '${seen.get(identifier)}' and '${name}'.`);
+
+    seen.set(identifier, name);
+    lines.push(`    public const string ${identifier} = "lu-${name}";`);
+}
+
+const source = `// <auto-generated />
+// Built by Client/scripts/build-icons.mjs from @lucide/icons. Do not edit by hand.
+
+namespace NE.Standard.UI.Icons.Lucide;
+
+/// <summary>
+/// Every Lucide name, as the string an <c>Icon</c> property takes. The <c>lu-</c> prefix is part of the
+/// value: a glyph class is global, and Lucide and Material share a hundred names between them.
+/// Which of these a page can actually draw is what the application registers — see <c>AddLucideWebIcons</c>.
+/// </summary>
+public static class LucideIcons
+{
+${lines.join("\n")}
+}
+`;
+
+writeFileSync(resolve(NAMES), source, "utf8");
+console.log(`names: ${lines.length} constants`);

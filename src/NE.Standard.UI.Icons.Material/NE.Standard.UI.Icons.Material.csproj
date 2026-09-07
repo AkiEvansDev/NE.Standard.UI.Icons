@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>NE.Standard.UI.Icons.Material</PackageId>
+    <Description>Every Material Symbols name, as constants an NE.Standard UI component can be given. Platform-independent - the rendering lives in the platform's own icon package, which serves only the glyphs an application registers. MIT, unlike the framework it plugs into.</Description>
+    <PackageTags>NE.Standard,UI,Icons,Material</PackageTags>
+  </PropertyGroup>
+
+</Project>
