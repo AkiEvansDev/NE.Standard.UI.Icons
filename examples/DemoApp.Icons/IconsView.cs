@@ -7,7 +7,6 @@ using NE.Standard.UI.Components.BuiltIns.Inputs;
 using NE.Standard.UI.Components.BuiltIns.Items;
 using NE.Standard.UI.Components.BuiltIns.Layouts;
 using NE.Standard.UI.Components.BuiltIns.Models;
-using NE.Standard.UI.Components.Foundation.Inputs;
 using NE.Standard.UI.Icons.Material;
 using NE.Standard.UI.Primitives.Binding;
 using NE.Standard.UI.Primitives.Interaction;

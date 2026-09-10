@@ -4,6 +4,11 @@ One section per release of this slice, headed `## X.Y.Z` and named by the tag â€
 workflow cuts the matching section out to become the body of the GitHub release, and a tag with no section
 fails the release before anything is published.
 
+## 1.0.0-rc.2
+
+Nothing but the number: the sets are unchanged since `1.0.0-preview.2`. The slices go out together, and a set
+left a number behind reads as if it had been dropped from the release.
+
 ## 1.0.0-rc.1
 
 Nothing but the number: the sets are unchanged since `1.0.0-preview.2`. The framework and the packages that
