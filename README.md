@@ -7,16 +7,20 @@ the glyph table embedded in its assembly and builds a stylesheet from what the a
 ## Install
 
 ```
-dotnet add package NE.Standard.UI.Icons.Lucide --prerelease
-dotnet add package NE.Standard.UI.Web.Icons.Lucide --prerelease
+dotnet add package NE.Standard.UI.Icons.Material --prerelease
+dotnet add package NE.Standard.UI.Web.Icons.Material --prerelease
 ```
+
+**The Lucide packages are deprecated and frozen.** Lucide ships no font, and a library that draws its icons two ways is a
+divergence; they stay published for the applications already on them and follow no new Lucide release. A new application
+takes Material Symbols.
 
 | Set | Drawing | Glyphs | Names | Web |
 |---|---|---|---|---|
 | [Lucide](https://lucide.dev) | Lines, 2 px on a 24 grid | 1 792 | [`NE.Standard.UI.Icons.Lucide`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Lucide) | [`NE.Standard.UI.Web.Icons.Lucide`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Lucide) |
 | [Material Symbols](https://fonts.google.com/icons) | Rounded, filled and outlined | 3 903 | [`NE.Standard.UI.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Material) | [`NE.Standard.UI.Web.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Material) |
 
-Both sets are complete, and neither ships a stylesheet: the whole of Lucide is 700 KB of CSS and the whole of
+Both sets are complete — Lucide as of the day it was frozen — and neither ships a stylesheet: the whole of Lucide is 700 KB of CSS and the whole of
 Material three megabytes, while an application draws tens of glyphs. The glyph table ships in the assembly
 instead, and what reaches a browser is what the application registered.
 
@@ -53,7 +57,8 @@ new TextComponent()
     .SetTitle("Delete project?");
 
 new ButtonComponent()
-    .ConfigureDefaultContent(c => c.SetIcon(MaterialIcons.Save).SetTitle("Save changes"))
+    .SetIcon(MaterialIcons.Save)
+    .SetTitle("Save changes")
     .OnClick(nameof(Controller.Save));
 ```
 
@@ -67,9 +72,9 @@ application's decision, and a `const string` of its own is the place to make it 
 
 ## The demo
 
-One page over both sets, read off the packages themselves so it cannot fall behind the tables it documents.
-Material is what it opens on; a selector switches the set, another switches Material between its two
-drawings, and the search box matches the constant and the glyph alike.
+A page per set, read off the packages themselves so it cannot fall behind the tables it documents. Material is
+what it opens on, with a selector for its two drawings; Lucide is the other page; the search box matches the
+constant and the glyph alike.
 
 Four thousand tiles are not a page, so the gallery is a **windowed** items view: it holds a hundred at a
 time and reads the next as they are scrolled to, and the search runs on the server — the browser only ever
@@ -77,10 +82,10 @@ had a hundred names to look through. It is also the one case a registration cann
 for both sets whole, and for both of Material's drawings.
 
 ```
-dotnet run --project examples/DemoApp.Icons     # http://localhost:5300
+dotnet run --project examples/DemoApp.Icons.Web     # http://localhost:5300
 ```
 
-## License
+## Licence
 
 **MIT** — see [LICENSE](LICENSE). The icon sets are a table of names and a stylesheet, and there is no reason
 for them to carry a licence anyone has to read.

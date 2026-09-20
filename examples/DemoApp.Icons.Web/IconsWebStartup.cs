@@ -5,7 +5,7 @@ using NE.Standard.UI.Web.Icons.Material;
 using NE.Standard.UI.Web.Renderers.DI;
 using NE.Standard.UI.Web.Startup;
 
-namespace DemoApp.Icons;
+namespace DemoApp.Icons.Web;
 
 internal sealed class IconsWebStartup : WebStartupBase<IconsAppStartup>
 {

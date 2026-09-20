@@ -13,8 +13,8 @@ namespace NE.Standard.UI.Web.Icons.Lucide;
 /// Builds the pack's stylesheet from the glyphs an application registered.
 /// </summary>
 /// <remarks>
-/// The glyph table ships deflated — 646 KB of JSON becomes 78 KB in the assembly — and is decompressed once,
-/// when the stylesheet is written.
+/// The glyph table ships deflated — 646 KB of JSON becomes 78 KB in the assembly — decompressed once per
+/// stylesheet build.
 /// </remarks>
 internal static class LucideIconStylesheet
 {

@@ -9,14 +9,9 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// reached through, and one rule per glyph naming the ligature that draws it.
 /// </summary>
 /// <remarks>
-/// The font carries every glyph, so registration no longer decides what is *downloaded* — it decides which
-/// classes exist. That is still worth doing and still worth failing on: a class per glyph is what turns
-/// <c>ms-check</c> into a drawing, an unregistered name draws nothing, and all 3 903 of them written out
-/// would be a stylesheet the size of the font itself.
-/// <para>
-/// Nothing here is a data URI any more. The font is served as its own asset because a 382 KB <c>woff2</c>
-/// inlined into CSS is 509 KB of base64 that no browser can cache separately from the rules around it.
-/// </para>
+/// The font carries every glyph already, so registration decides which classes exist (an unregistered name
+/// draws nothing) rather than what downloads. The font ships as its own asset, not inlined, since a 382 KB
+/// <c>woff2</c> as base64 couldn't be cached apart from the stylesheet's rules.
 /// </remarks>
 internal static class MaterialIconStylesheet
 {
@@ -45,8 +40,8 @@ internal static class MaterialIconStylesheet
             .Append(registration.IncludesEverything ? "every glyph" : registration.Names.Count.ToString(CultureInfo.InvariantCulture) + " registered glyph(s)")
             .AppendLine(". Generated at startup — see MaterialIconStylesheet. */");
 
-        // `block` rather than `swap`: there is no fallback that could stand in for a glyph, so the choice is
-        // between a moment of nothing and a moment of the ligature's own letters spelled out.
+        // `block` rather than `swap`: no fallback could stand in for a glyph, so the choice is between a
+        // moment of nothing and a moment of the ligature's letters spelled out.
         _ = builder
             .Append("@font-face { font-family: \"")
             .Append(FontFamily)
@@ -74,8 +69,8 @@ internal static class MaterialIconStylesheet
     }
 
     /// <summary>
-    /// Both drawings of one glyph, told apart by a suffix on the class and by nothing else: the filled and
-    /// the outlined one are the same ligature at the two ends of the font's <c>FILL</c> axis.
+    /// Both drawings of one glyph, told apart only by a suffix on the class: filled and outlined are the same
+    /// ligature at opposite ends of the font's <c>FILL</c> axis.
     /// </summary>
     private static void AppendGlyph(StringBuilder builder, MaterialIconRegistration registration, string name)
     {
@@ -99,7 +94,7 @@ internal static class MaterialIconStylesheet
             .Append(name.Replace('-', '_'))
             .Append("\"; --ui-icon-fill: ")
             .Append(fill.ToString(CultureInfo.InvariantCulture))
-            // A glyph is text and takes the element's colour; the box behind it paints nothing. Painting is
-            // what the mask forms want and stays their default, so it is this form that opts out.
+            // A glyph is text and takes the element's colour; its box paints nothing — mask forms default to
+            // painting, so this form opts out.
             .AppendLine("; --ui-icon-paint: transparent; }");
 }

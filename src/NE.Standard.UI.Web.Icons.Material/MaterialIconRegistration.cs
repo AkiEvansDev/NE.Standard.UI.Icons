@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
+using NE.Standard.UI.Web.Abstractions.Assets;
 
 namespace NE.Standard.UI.Web.Icons.Material;
 
 /// <summary>
 /// What an application asked the Material pack for, accumulated across every <c>AddMaterialWebIcons</c> call
-/// and read once, when the stylesheet is built.
+/// and read once when the stylesheet is built.
 /// </summary>
 /// <remarks>
-/// Registration decides which glyph *classes* exist, which is what turns a name into a drawing. It stopped
-/// deciding what is downloaded when the pack moved to a font — one 382 KB file carries all 3 903 glyphs — but
-/// writing every one of them out is half a megabyte of stylesheet for an application that draws forty, so a
-/// registration is still asked for and a name that is not in the font is still worth failing on.
+/// Registration decides which glyph *classes* exist, not what's downloaded — the font already carries every
+/// glyph — but writing all 3 903 classes would still bloat the stylesheet, so an unregistered name is still
+/// worth failing on.
 /// </remarks>
 public sealed class MaterialIconRegistration
 {
@@ -27,8 +27,8 @@ public sealed class MaterialIconRegistration
     public IReadOnlyCollection<string> Names => _names;
 
     /// <summary>
-    /// Adds glyphs to what the application serves. Names are the <c>MaterialIcons</c> constants; a name this
-    /// pack does not know is a mistake worth failing on rather than a glyph that silently never draws.
+    /// Adds glyphs to what the application serves, named by the <c>MaterialIcons</c> constants; an unknown
+    /// name throws rather than silently drawing nothing.
     /// </summary>
     public MaterialIconRegistration Add(MaterialIconStyle styles, params string[] names)
     {
@@ -62,5 +62,5 @@ public sealed class MaterialIconRegistration
     /// the table stays keyed by Material's own name.
     /// </summary>
     internal static string Normalize(string name)
-        => name.StartsWith("ms-", StringComparison.Ordinal) ? name[3..] : name;
+        => WebPackageRegistration.NormalizeIconName(name, "ms-");
 }

@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
+using NE.Standard.UI.Web.Abstractions.Assets;
 
 namespace NE.Standard.UI.Web.Icons.Lucide;
 
 /// <summary>
 /// What an application asked the Lucide pack for, accumulated across every <c>AddLucideWebIcons</c> call and
-/// read once, when the stylesheet is built.
+/// read once when the stylesheet is built.
 /// </summary>
 /// <remarks>
-/// Lucide is 1 715 glyphs and roughly 700 KB of stylesheet; an application draws tens of them. The table
-/// ships in the assembly so every name stays available and discoverable, and what reaches the browser is what
-/// was asked for.
+/// Lucide is 1 715 glyphs, roughly 700 KB of stylesheet; only the glyphs asked for reach the browser.
 /// </remarks>
 public sealed class LucideIconRegistration
 {
@@ -23,8 +22,8 @@ public sealed class LucideIconRegistration
     public IReadOnlyCollection<string> Names => _names;
 
     /// <summary>
-    /// Adds glyphs to what the application serves. Names are the <c>LucideIcons</c> constants; a name this
-    /// pack does not know is a mistake worth failing on rather than a glyph that silently never draws.
+    /// Adds glyphs to what the application serves, named by the <c>LucideIcons</c> constants; an unknown name
+    /// throws rather than silently drawing nothing.
     /// </summary>
     public LucideIconRegistration Add(params string[] names)
     {
@@ -55,5 +54,5 @@ public sealed class LucideIconRegistration
     /// the table stays keyed by Lucide's own name.
     /// </summary>
     internal static string Normalize(string name)
-        => name.StartsWith("lu-", StringComparison.Ordinal) ? name[3..] : name;
+        => WebPackageRegistration.NormalizeIconName(name, "lu-");
 }

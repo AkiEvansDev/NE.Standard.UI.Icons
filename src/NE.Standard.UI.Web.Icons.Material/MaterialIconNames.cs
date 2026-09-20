@@ -11,10 +11,8 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// Which glyph names the font actually carries, read once out of the <see cref="MaterialIcons"/> constants.
 /// </summary>
 /// <remarks>
-/// Read from the constants rather than shipped as a second generated table: the constants are generated from
-/// the same run that builds the font, so they cannot disagree with it, and a second list of 3 903 names would
-/// be one more thing to keep in step. The cost is one reflection pass over a static class, once, and only when
-/// something is registered.
+/// Read from the constants rather than a second generated table, since both come from the same build and
+/// can't disagree; the cost is one reflection pass, once, when something registers.
 /// </remarks>
 internal static class MaterialIconNames
 {

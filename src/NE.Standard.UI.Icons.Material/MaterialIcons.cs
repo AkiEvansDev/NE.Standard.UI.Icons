@@ -4,12 +4,12 @@
 namespace NE.Standard.UI.Icons.Material;
 
 /// <summary>
-/// Every Material Symbols name, as the string an <c>Icon</c> property takes. The <c>ms-</c> prefix is part
-/// of the value: a glyph class is global, and Material and Lucide share a hundred names between them.
-/// Which of these a page can actually draw is what the application registers — see <c>AddMaterialWebIcons</c>.
+/// Every Material Symbols name, as the string an <c>Icon</c> property takes — the <c>ms-</c> prefix is part of
+/// the value since Material and Lucide share names. Which of these a page can draw is what the application
+/// registers; see <c>AddMaterialWebIcons</c>.
 /// <para>
-/// Partial: the outlined drawing of any of these is the same name plus a suffix, and that half is written by
-/// hand in MaterialIconStyles.cs.
+/// Partial: the outlined drawing of any of these is the same name plus a suffix, written by hand in
+/// MaterialIconStyles.cs.
 /// </para>
 /// </summary>
 public static partial class MaterialIcons

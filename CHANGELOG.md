@@ -4,6 +4,17 @@ One section per release of this slice, headed `## X.Y.Z` and named by the tag â€
 workflow cuts the matching section out to become the body of the GitHub release, and a tag with no section
 fails the release before anything is published.
 
+## 1.0.0-rc.3
+
+The glyphs are unchanged since `1.0.0-preview.2`; what moved is how a set registers itself.
+
+- Both web packages keep what an application registered through the framework's own package registration
+  (`WebPackageRegistration`), one scaffold in place of a copy in each set, so they need the framework's `1.0.0-rc.3`.
+- **The Lucide packages are deprecated and frozen.** Lucide ships no font, and a library that draws its icons two ways is
+  a divergence; they stay published for the applications already on them and follow no new Lucide release. A new
+  application takes Material Symbols.
+- The demo is an application project and a web host, a page per set, in the shell every add-on demo wears.
+
 ## 1.0.0-rc.2
 
 Nothing but the number: the sets are unchanged since `1.0.0-preview.2`. The slices go out together, and a set

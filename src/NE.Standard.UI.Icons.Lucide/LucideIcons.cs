@@ -4,9 +4,9 @@
 namespace NE.Standard.UI.Icons.Lucide;
 
 /// <summary>
-/// Every Lucide name, as the string an <c>Icon</c> property takes. The <c>lu-</c> prefix is part of the
-/// value: a glyph class is global, and Lucide and Material share a hundred names between them.
-/// Which of these a page can actually draw is what the application registers — see <c>AddLucideWebIcons</c>.
+/// Every Lucide name, as the string an <c>Icon</c> property takes — the <c>lu-</c> prefix is part of the
+/// value since Lucide and Material share names. Which of these a page can draw is what the application
+/// registers; see <c>AddLucideWebIcons</c>.
 /// </summary>
 public static class LucideIcons
 {

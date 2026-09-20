@@ -10,6 +10,7 @@
 
   <Folder Name="/examples/">
     <Project Path="examples/DemoApp.Icons/DemoApp.Icons.csproj" />
+    <Project Path="examples/DemoApp.Icons.Web/DemoApp.Icons.Web.csproj" />
   </Folder>
 
   <Folder Name="/solution/">

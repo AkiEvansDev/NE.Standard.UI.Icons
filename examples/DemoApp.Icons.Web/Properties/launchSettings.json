@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "DemoApp.Icons": {
+    "DemoApp.Icons.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "",

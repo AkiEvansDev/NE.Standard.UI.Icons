@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using NE.Standard.UI.Web.Abstractions.Assets;
 
@@ -17,8 +16,8 @@ public enum LucideIconScope
 public static class LucideWebIconExtensions
 {
     /// <summary>
-    /// Serves the named Lucide glyphs. Call it as many times as suits the application — a feature can ask for
-    /// its own icons where it is registered, and the pack builds one stylesheet from all of it.
+    /// Serves the named Lucide glyphs. Callable multiple times — each feature can register its own icons, and
+    /// the pack builds one stylesheet from all of them.
     /// </summary>
     public static IServiceCollection AddLucideWebIcons(this IServiceCollection services, params string[] names)
     {
@@ -30,8 +29,8 @@ public static class LucideWebIconExtensions
     }
 
     /// <summary>
-    /// Serves the whole set. For a gallery, and for an application whose icon names come from data — the one
-    /// case a registration cannot cover, because nothing knows the names before they arrive.
+    /// Serves the whole set — for a gallery, or when icon names come from data and can't be named at
+    /// registration time.
     /// </summary>
     public static IServiceCollection AddLucideWebIcons(this IServiceCollection services, LucideIconScope scope)
     {
@@ -45,21 +44,16 @@ public static class LucideWebIconExtensions
     }
 
     /// <summary>
-    /// One registration and one asset however many times the application calls in — the stylesheet is built
-    /// from a factory, so it is written after every call has had its say rather than at the first.
+    /// One registration and one asset however many times the application calls in; the stylesheet builds from
+    /// a factory, so it's written after every call, not the first.
     /// </summary>
     private static LucideIconRegistration Register(IServiceCollection services)
     {
-        LucideIconRegistration? registration = (LucideIconRegistration?)services
-            .FirstOrDefault(descriptor => descriptor.ServiceType == typeof(LucideIconRegistration))?
-            .ImplementationInstance;
+        LucideIconRegistration registration = WebPackageRegistration.GetOrAdd(services, static () => new LucideIconRegistration(), out var added);
 
-        if (registration is not null)
+        if (!added)
             return registration;
 
-        registration = new LucideIconRegistration();
-
-        _ = services.AddSingleton(registration);
         _ = services.AddSingleton(_ => new WebAssetDescriptor
         {
             Key = "ui-icons-lucide.css",

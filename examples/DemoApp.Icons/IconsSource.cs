@@ -25,32 +25,29 @@ internal sealed partial class IconItem : RecursiveObservable, IBindableItem
     [RecursiveMember]
     public partial string Glyph { get; set; } = string.Empty;
 
-    /// <summary>Which set the tile came from; the host's set filter names this property.</summary>
-    [RecursiveMember]
-    public partial string Set { get; set; } = string.Empty;
-
     /// <summary>Which drawing the tile shows; empty for a set that has only one.</summary>
     [RecursiveMember]
     public partial string Style { get; set; } = string.Empty;
 }
 
 /// <summary>
-/// What the gallery's three rules resolved to, read off the query a window request carries.
+/// What the gallery's rules resolved to, read off the query a window request carries, over the set the page stands for.
 /// </summary>
 internal readonly record struct IconsQuery(string Set, string Style, string Text)
 {
     /// <summary>The gallery as it opens, and what a request with no terms means.</summary>
-    public static IconsQuery Default { get; } = new(IconsCatalog.MaterialSet, IconsCatalog.FilledStyle, string.Empty);
+    public static IconsQuery Default(string set)
+        => new(set, IconsCatalog.FilledStyle, string.Empty);
 
     /// <summary>
     /// Reads the terms this source understands; a rule that is not active contributes none, which is what makes
     /// an empty search box mean "everything".
     /// </summary>
-    public static IconsQuery Read(UIItemsQuery query)
+    public static IconsQuery Read(UIItemsQuery query, string set)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IconsQuery result = Default;
+        IconsQuery result = Default(set);
 
         for (var i = 0; i < query.Filters.Length; i++)
         {
@@ -59,7 +56,6 @@ internal readonly record struct IconsQuery(string Set, string Style, string Text
 
             result = term.ItemProperty switch
             {
-                nameof(IconItem.Set) => result with { Set = value },
                 nameof(IconItem.Style) => result with { Style = value },
                 nameof(IconItem.Name) => result with { Text = value.Trim() },
                 _ => result
@@ -74,17 +70,17 @@ internal readonly record struct IconsQuery(string Set, string Style, string Text
 /// A set's names, a window at a time: the search is resolved on the server, so the browser never holds
 /// four thousand tiles to filter.
 /// </summary>
-internal sealed partial class IconsSource : UIItemSourceBase<IconItem>
+internal sealed partial class IconsSource(string set) : UIItemSourceBase<IconItem>
 {
     /// <summary>What the line under the search box reads. The source writes it because it is what counts.</summary>
     [RecursiveMember]
-    public partial string Caption { get; set; } = Describe(IconsQuery.Default, IconsCatalog.Count(IconsCatalog.MaterialSet));
+    public partial string Caption { get; set; } = Describe(IconsQuery.Default(set), IconsCatalog.Count(set));
 
     protected override Task<UIItemWindow<IconItem>> GetWindowAsync(UIItemWindowRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        IconsQuery query = IconsQuery.Read(request.Query);
+        IconsQuery query = IconsQuery.Read(request.Query, set);
         IconName[] matches = IconsCatalog.Match(query);
         var total = matches.Length;
 
@@ -123,8 +119,7 @@ internal sealed partial class IconsSource : UIItemSourceBase<IconItem>
             Id = name.Glyph,
             Name = name.Name,
             Glyph = IconsCatalog.Draw(name, query),
-            Set = query.Set,
-            // Lucide draws one way, so its tiles carry no drawing; the selector that picks one is hidden with it.
+            // Lucide draws one way, so its tiles carry no drawing and its page has no selector for one.
             Style = query.Set == IconsCatalog.MaterialSet ? query.Style : string.Empty
         };
 

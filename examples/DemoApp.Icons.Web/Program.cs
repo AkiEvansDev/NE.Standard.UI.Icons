@@ -1,4 +1,5 @@
 using DemoApp.Icons;
+using DemoApp.Icons.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using NE.Standard.UI.Web.Hosting;
@@ -8,7 +9,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+#if DEBUG
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+#else
 builder.Logging.SetMinimumLevel(LogLevel.Warning);
+#endif
 
 WebStartupBuilder.Configure<IconsWebStartup, IconsAppStartup>(builder.Services);
 

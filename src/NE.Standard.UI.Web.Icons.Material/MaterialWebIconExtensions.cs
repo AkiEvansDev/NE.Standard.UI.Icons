@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using NE.Standard.UI.Web.Abstractions.Assets;
 
@@ -21,8 +20,8 @@ public static class MaterialWebIconExtensions
     private const string FontPath = "/fonts/ui-icons-material.woff2";
 
     /// <summary>
-    /// Serves the named Material glyphs. Call it as many times as suits the application — a feature can ask
-    /// for its own icons where it is registered, and the pack builds one stylesheet from all of it.
+    /// Serves the named Material glyphs. Callable multiple times — each feature can register its own icons,
+    /// and the pack builds one stylesheet from all of them.
     /// </summary>
     public static IServiceCollection AddMaterialWebIcons(this IServiceCollection services, MaterialIconStyle style, params string[] names)
     {
@@ -38,8 +37,8 @@ public static class MaterialWebIconExtensions
         => services.AddMaterialWebIcons(MaterialIconStyle.Fill, names);
 
     /// <summary>
-    /// Serves the whole set. For a gallery, and for an application whose icon names come from data — the one
-    /// case a registration cannot cover, because nothing knows the names before they arrive.
+    /// Serves the whole set — for a gallery, or when icon names come from data and can't be named at
+    /// registration time.
     /// </summary>
     public static IServiceCollection AddMaterialWebIcons(this IServiceCollection services, MaterialIconScope scope, MaterialIconStyle style = MaterialIconStyle.Fill)
     {
@@ -58,19 +57,13 @@ public static class MaterialWebIconExtensions
     /// </summary>
     private static MaterialIconRegistration Register(IServiceCollection services)
     {
-        MaterialIconRegistration? registration = (MaterialIconRegistration?)services
-            .FirstOrDefault(descriptor => descriptor.ServiceType == typeof(MaterialIconRegistration))?
-            .ImplementationInstance;
+        MaterialIconRegistration registration = WebPackageRegistration.GetOrAdd(services, static () => new MaterialIconRegistration(), out var added);
 
-        if (registration is not null)
+        if (!added)
             return registration;
 
-        registration = new MaterialIconRegistration();
-
-        _ = services.AddSingleton(registration);
-
-        // The font is its own asset rather than a data URI in the stylesheet: 382 KB of woff2 is 509 KB of
-        // base64, and inlined it can never be cached apart from the rules that change with every registration.
+        // The font is its own asset, not a data URI in the stylesheet — 382 KB of woff2 becomes 509 KB of
+        // base64, uncacheable apart from rules that change with every registration.
         WebAssetDescriptor font = new()
         {
             Key = FontKey,
