@@ -1,12 +1,12 @@
 // Builds the Material Symbols pack: one variable font for the assembly to embed, and the C# name constants
-// beside it. Rounded only, to sit next to Lucide without reading as a second design.
+// beside it. Rounded only, the drawing family the framework's own marks are cut from.
 //
 // A font, not SVGs: the same glyph rasterises through the sharper text path instead of the image path at
 // 14-16px. Keeping `FILL` and `opsz` as font axes serves the outlined drawing and small-size rendering from
 // one file instead of separate 700 KB tables.
 //
-// `wght` and `GRAD` are pinned, since a UI never varies either — that takes the file from 5.3 MB to 382 KB
-// while keeping all 3 899 glyphs.
+// `wght` and `GRAD` are pinned, since a UI never varies either — that takes the file from 5.3 MB to 386 KB
+// while keeping all 3 927 glyphs.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -18,8 +18,8 @@ const DIST = "dist";
 const FONT = "ui-icons-material.woff2";
 const NAMES = "../../NE.Standard.UI.Icons.Material/MaterialIcons.cs";
 
-// Reserved words a glyph name would collide with as a C# identifier, plus the one name that starts with a
-// digit. Everything else PascalCases cleanly.
+// Reserved words a glyph name would collide with as a C# identifier; a name that starts with a digit takes an `N`
+// in toIdentifier. Everything else PascalCases cleanly.
 const RESERVED = new Set(["Class", "Object", "String", "Double", "Switch", "Lock", "Default", "Event", "Base", "Checked", "Void"]);
 
 function toIdentifier(name) {
@@ -85,8 +85,8 @@ namespace NE.Standard.UI.Icons.Material;
 
 /// <summary>
 /// Every Material Symbols name, as the string an <c>Icon</c> property takes — the <c>ms-</c> prefix is part of
-/// the value since Material and Lucide share names. Which of these a page can draw is what the application
-/// registers; see <c>AddMaterialWebIcons</c>.
+/// the value, keeping a glyph class apart from the framework's <c>ne-</c> marks and an application's own classes.
+/// Which of these a page can draw is what the application registers; see <c>AddMaterialWebIcons</c>.
 /// <para>
 /// Partial: the outlined drawing of any of these is the same name plus a suffix, written by hand in
 /// MaterialIconStyles.cs.

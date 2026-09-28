@@ -5,8 +5,8 @@ namespace NE.Standard.UI.Icons.Material;
 
 /// <summary>
 /// Every Material Symbols name, as the string an <c>Icon</c> property takes — the <c>ms-</c> prefix is part of
-/// the value since Material and Lucide share names. Which of these a page can draw is what the application
-/// registers; see <c>AddMaterialWebIcons</c>.
+/// the value, keeping a glyph class apart from the framework's <c>ne-</c> marks and an application's own classes.
+/// Which of these a page can draw is what the application registers; see <c>AddMaterialWebIcons</c>.
 /// <para>
 /// Partial: the outlined drawing of any of these is the same name plus a suffix, written by hand in
 /// MaterialIconStyles.cs.
@@ -255,6 +255,7 @@ public static partial class MaterialIcons
     public const string ApprovalDelegationOff = "ms-approval-delegation-off";
     public const string Apps = "ms-apps";
     public const string AppsOutage = "ms-apps-outage";
+    public const string AppsPlus = "ms-apps-plus";
     public const string Aq = "ms-aq";
     public const string AqIndoor = "ms-aq-indoor";
     public const string ArOnYou = "ms-ar-on-you";
@@ -673,6 +674,7 @@ public static partial class MaterialIcons
     public const string CarMirrorHeat = "ms-car-mirror-heat";
     public const string CarRental = "ms-car-rental";
     public const string CarRepair = "ms-car-repair";
+    public const string CarSeatOff = "ms-car-seat-off";
     public const string CarTag = "ms-car-tag";
     public const string CardMembership = "ms-card-membership";
     public const string CardTravel = "ms-card-travel";
@@ -718,6 +720,7 @@ public static partial class MaterialIcons
     public const string ChatBubble = "ms-chat-bubble";
     public const string ChatBubbleOff = "ms-chat-bubble-off";
     public const string ChatDashed = "ms-chat-dashed";
+    public const string ChatDisplay = "ms-chat-display";
     public const string ChatError = "ms-chat-error";
     public const string ChatInfo = "ms-chat-info";
     public const string ChatPasteGo = "ms-chat-paste-go";
@@ -793,6 +796,7 @@ public static partial class MaterialIcons
     public const string ClosedCaption = "ms-closed-caption";
     public const string ClosedCaptionAdd = "ms-closed-caption-add";
     public const string ClosedCaptionDisabled = "ms-closed-caption-disabled";
+    public const string ClosedCaptionDisplay = "ms-closed-caption-display";
     public const string Cloud = "ms-cloud";
     public const string CloudAlert = "ms-cloud-alert";
     public const string CloudCircle = "ms-cloud-circle";
@@ -1020,6 +1024,7 @@ public static partial class MaterialIcons
     public const string DeveloperModeTv = "ms-developer-mode-tv";
     public const string DeviceBand = "ms-device-band";
     public const string DeviceHub = "ms-device-hub";
+    public const string DeviceSwooshStar = "ms-device-swoosh-star";
     public const string DeviceThermostat = "ms-device-thermostat";
     public const string Devices = "ms-devices";
     public const string DevicesFold = "ms-devices-fold";
@@ -1067,6 +1072,7 @@ public static partial class MaterialIcons
     public const string DishwasherGen = "ms-dishwasher-gen";
     public const string DisplayAdd = "ms-display-add";
     public const string DisplayExternalInput = "ms-display-external-input";
+    public const string DisplayGroup = "ms-display-group";
     public const string DisplaySettings = "ms-display-settings";
     public const string Distance = "ms-distance";
     public const string Diversity1 = "ms-diversity-1";
@@ -1087,6 +1093,7 @@ public static partial class MaterialIcons
     public const string DocsAppsScript = "ms-docs-apps-script";
     public const string DocumentScanner = "ms-document-scanner";
     public const string DocumentSearch = "ms-document-search";
+    public const string DocumentShare = "ms-document-share";
     public const string Domain = "ms-domain";
     public const string DomainAdd = "ms-domain-add";
     public const string DomainDisabled = "ms-domain-disabled";
@@ -1165,6 +1172,7 @@ public static partial class MaterialIcons
     public const string EditAudio = "ms-edit-audio";
     public const string EditCalendar = "ms-edit-calendar";
     public const string EditDocument = "ms-edit-document";
+    public const string EditLine = "ms-edit-line";
     public const string EditLocation = "ms-edit-location";
     public const string EditLocationAlt = "ms-edit-location-alt";
     public const string EditNote = "ms-edit-note";
@@ -1353,12 +1361,14 @@ public static partial class MaterialIcons
     public const string FilterAltOff = "ms-filter-alt-off";
     public const string FilterArrowRight = "ms-filter-arrow-right";
     public const string FilterBAndW = "ms-filter-b-and-w";
+    public const string FilterCancel = "ms-filter-cancel";
     public const string FilterCenterFocus = "ms-filter-center-focus";
     public const string FilterDrama = "ms-filter-drama";
     public const string FilterFrames = "ms-filter-frames";
     public const string FilterList = "ms-filter-list";
     public const string FilterListOff = "ms-filter-list-off";
     public const string FilterNone = "ms-filter-none";
+    public const string FilterPlus = "ms-filter-plus";
     public const string FilterRetrolux = "ms-filter-retrolux";
     public const string FilterTiltShift = "ms-filter-tilt-shift";
     public const string FilterVintage = "ms-filter-vintage";
@@ -1541,6 +1551,7 @@ public static partial class MaterialIcons
     public const string FullscreenExit = "ms-fullscreen-exit";
     public const string FullscreenPortrait = "ms-fullscreen-portrait";
     public const string Function = "ms-function";
+    public const string FunctionSearch = "ms-function-search";
     public const string Functions = "ms-functions";
     public const string Funicular = "ms-funicular";
     public const string GMobiledata = "ms-g-mobiledata";
@@ -1638,6 +1649,7 @@ public static partial class MaterialIcons
     public const string Grocery = "ms-grocery";
     public const string Group = "ms-group";
     public const string GroupAdd = "ms-group-add";
+    public const string GroupEye = "ms-group-eye";
     public const string GroupOff = "ms-group-off";
     public const string GroupRemove = "ms-group-remove";
     public const string GroupSearch = "ms-group-search";
@@ -1816,6 +1828,7 @@ public static partial class MaterialIcons
     public const string Imagesmode = "ms-imagesmode";
     public const string Immunology = "ms-immunology";
     public const string ImportContacts = "ms-import-contacts";
+    public const string ImportSpark = "ms-import-spark";
     public const string ImportantDevices = "ms-important-devices";
     public const string InHomeMode = "ms-in-home-mode";
     public const string InactiveOrder = "ms-inactive-order";
@@ -2107,8 +2120,11 @@ public static partial class MaterialIcons
     public const string MarkEmailUnread = "ms-mark-email-unread";
     public const string MarkUnreadChatAlt = "ms-mark-unread-chat-alt";
     public const string Markdown = "ms-markdown";
+    public const string MarkdownConvert = "ms-markdown-convert";
     public const string MarkdownCopy = "ms-markdown-copy";
+    public const string MarkdownDocument = "ms-markdown-document";
     public const string MarkdownPaste = "ms-markdown-paste";
+    public const string MarkdownSpark = "ms-markdown-spark";
     public const string MarkunreadMailbox = "ms-markunread-mailbox";
     public const string MaskedTransitions = "ms-masked-transitions";
     public const string MaskedTransitionsAdd = "ms-masked-transitions-add";
@@ -2213,6 +2229,7 @@ public static partial class MaterialIcons
     public const string MobileSound2 = "ms-mobile-sound-2";
     public const string MobileSoundOff = "ms-mobile-sound-off";
     public const string MobileSpeaker = "ms-mobile-speaker";
+    public const string MobileTap = "ms-mobile-tap";
     public const string MobileText = "ms-mobile-text";
     public const string MobileText2 = "ms-mobile-text-2";
     public const string MobileTheft = "ms-mobile-theft";
@@ -2563,6 +2580,8 @@ public static partial class MaterialIcons
     public const string Pending = "ms-pending";
     public const string PendingActions = "ms-pending-actions";
     public const string Pentagon = "ms-pentagon";
+    public const string PeopleSizeDecrease = "ms-people-size-decrease";
+    public const string PeopleSizeIncrease = "ms-people-size-increase";
     public const string Percent = "ms-percent";
     public const string PercentDiscount = "ms-percent-discount";
     public const string Pergola = "ms-pergola";
@@ -3053,6 +3072,7 @@ public static partial class MaterialIcons
     public const string ShareReviews = "ms-share-reviews";
     public const string ShareWindows = "ms-share-windows";
     public const string ShavedIce = "ms-shaved-ice";
+    public const string SheetsColumnSwap = "ms-sheets-column-swap";
     public const string SheetsRtl = "ms-sheets-rtl";
     public const string ShelfAutoHide = "ms-shelf-auto-hide";
     public const string ShelfPosition = "ms-shelf-position";
@@ -3191,10 +3211,12 @@ public static partial class MaterialIcons
     public const string SpaceDashboard2 = "ms-space-dashboard-2";
     public const string SpatialAudio = "ms-spatial-audio";
     public const string SpatialAudioOff = "ms-spatial-audio-off";
+    public const string SpatialGallery = "ms-spatial-gallery";
     public const string SpatialSpeaker = "ms-spatial-speaker";
     public const string SpatialTracking = "ms-spatial-tracking";
     public const string Speaker = "ms-speaker";
     public const string Speaker2 = "ms-speaker-2";
+    public const string Speaker3 = "ms-speaker-3";
     public const string SpeakerGroup = "ms-speaker-group";
     public const string SpeakerNotes = "ms-speaker-notes";
     public const string SpeakerNotesOff = "ms-speaker-notes-off";
@@ -3299,6 +3321,7 @@ public static partial class MaterialIcons
     public const string StatMinus1 = "ms-stat-minus-1";
     public const string StatMinus2 = "ms-stat-minus-2";
     public const string StatMinus3 = "ms-stat-minus-3";
+    public const string SteeringWheelCool = "ms-steering-wheel-cool";
     public const string SteeringWheelHeat = "ms-steering-wheel-heat";
     public const string Step = "ms-step";
     public const string StepInto = "ms-step-into";
@@ -3454,6 +3477,7 @@ public static partial class MaterialIcons
     public const string TamperDetectionOn = "ms-tamper-detection-on";
     public const string Tapas = "ms-tapas";
     public const string Target = "ms-target";
+    public const string TargetCheck = "ms-target-check";
     public const string Task = "ms-task";
     public const string TaskAlt = "ms-task-alt";
     public const string TatamiSeat = "ms-tatami-seat";

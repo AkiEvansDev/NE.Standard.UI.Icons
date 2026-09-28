@@ -7,7 +7,6 @@
   <!-- The application, and the slice's own rendering beside it. -->
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Icons\DemoApp.Icons.csproj" />
-    <ProjectReference Include="..\..\src\NE.Standard.UI.Web.Icons.Lucide\NE.Standard.UI.Web.Icons.Lucide.csproj" />
     <ProjectReference Include="..\..\src\NE.Standard.UI.Web.Icons.Material\NE.Standard.UI.Web.Icons.Material.csproj" />
   </ItemGroup>
 

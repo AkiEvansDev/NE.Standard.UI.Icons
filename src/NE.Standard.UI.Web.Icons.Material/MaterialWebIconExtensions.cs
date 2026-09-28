@@ -5,7 +5,7 @@ using NE.Standard.UI.Web.Abstractions.Assets;
 namespace NE.Standard.UI.Web.Icons.Material;
 
 /// <summary>
-/// Asks for a glyph rather than for a set.
+/// Asks for the whole set rather than naming glyphs.
 /// </summary>
 public enum MaterialIconScope
 {
@@ -13,11 +13,12 @@ public enum MaterialIconScope
     All
 }
 
+/// <summary>Registers the Material Symbols pack with a web host.</summary>
 public static class MaterialWebIconExtensions
 {
     private const string FontKey = "ui-icons-material.woff2";
 
-    private const string FontPath = "/fonts/ui-icons-material.woff2";
+    private const string FontPath = "/_ne/fonts/ui-icons-material.woff2";
 
     /// <summary>
     /// Serves the named Material glyphs. Callable multiple times — each feature can register its own icons,
@@ -62,7 +63,7 @@ public static class MaterialWebIconExtensions
         if (!added)
             return registration;
 
-        // The font is its own asset, not a data URI in the stylesheet — 382 KB of woff2 becomes 509 KB of
+        // The font is its own asset, not a data URI in the stylesheet — 386 KB of woff2 becomes 515 KB of
         // base64, uncacheable apart from rules that change with every registration.
         WebAssetDescriptor font = new()
         {
@@ -86,7 +87,7 @@ public static class MaterialWebIconExtensions
             SourceKind = UIWebAssetSourceKind.Content,
             Source = "material-symbols-rounded",
             Content = MaterialIconStylesheet.Build(registration, font.ResolveVersionedPublicPath()),
-            PublicPath = "/css/ui-icons-material.css",
+            PublicPath = "/_ne/css/ui-icons-material.css",
             Order = 101
         });
 

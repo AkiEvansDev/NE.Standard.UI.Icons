@@ -10,7 +10,7 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// </summary>
 /// <remarks>
 /// Registration decides which glyph *classes* exist, not what's downloaded — the font already carries every
-/// glyph — but writing all 3 903 classes would still bloat the stylesheet, so an unregistered name is still
+/// glyph — but writing all 3 927 classes would still bloat the stylesheet, so an unregistered name is still
 /// worth failing on.
 /// </remarks>
 public sealed class MaterialIconRegistration
@@ -58,8 +58,8 @@ public sealed class MaterialIconRegistration
     }
 
     /// <summary>
-    /// Strips the <c>ms-</c> the constants carry so the glyph class stays distinct from another pack's while
-    /// the table stays keyed by Material's own name.
+    /// Strips the <c>ms-</c> the constants carry, which keeps the glyph class apart from the framework's <c>ne-</c> marks,
+    /// so the table stays keyed by Material's own name.
     /// </summary>
     internal static string Normalize(string name)
         => WebPackageRegistration.NormalizeIconName(name, "ms-");

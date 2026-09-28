@@ -6,9 +6,15 @@
 
   <PropertyGroup>
     <PackageId>NE.Standard.UI.Web.Icons.Material</PackageId>
-    <Description>Material Symbols Rounded for the NE.Standard UI web platform. One 382 KB variable font ships embedded — every glyph, with FILL and the optical size still axes — and the stylesheet is built at startup from the glyphs the application registers. MIT, unlike the framework it plugs into; the font itself is Apache-2.0.</Description>
+    <Description>Material Symbols Rounded for the NE.Standard UI web platform. One 386 KB variable font ships embedded — every glyph, with FILL and the optical size still axes — and the stylesheet is built at startup from the glyphs the application registers. MIT, unlike the framework it plugs into; the font itself is Apache-2.0.</Description>
     <PackageTags>NE.Standard,UI,Web,Icons,Material</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>NE.Test.Standard.UI.Icons</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NE.Standard.UI.Icons.Material\NE.Standard.UI.Icons.Material.csproj" />
@@ -37,12 +43,14 @@
     <MaterialIconFont>$(MSBuildProjectDirectory)\Client\dist\ui-icons-material.woff2</MaterialIconFont>
   </PropertyGroup>
 
-  <Target Name="BuildMaterialIconAssets" BeforeTargets="PrepareResources" Condition="'$(SkipWebIconBuild)' != 'true'">
-    <Exec
-      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
-      Command="npm install"
-      Condition="!Exists('$(MSBuildProjectDirectory)\Client\node_modules')" />
+  <!-- Installed again whenever the lockfile is newer than the install, not only when there is none: a dependency added
+       later (a linter, a bumped tool) would otherwise be missing from a clone that had restored before it. -->
+  <Target Name="RestoreMaterialIconPackages" Condition="'$(SkipWebIconBuild)' != 'true'" Inputs="$(MSBuildProjectDirectory)\Client\package-lock.json" Outputs="$(MSBuildProjectDirectory)\Client\node_modules\.package-lock.json">
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\Client" Command="npm install" />
+    <Touch Files="$(MSBuildProjectDirectory)\Client\node_modules\.package-lock.json" AlwaysCreate="true" />
+  </Target>
 
+  <Target Name="BuildMaterialIconAssets" BeforeTargets="PrepareResources" DependsOnTargets="RestoreMaterialIconPackages" Condition="'$(SkipWebIconBuild)' != 'true'">
     <Exec
       WorkingDirectory="$(MSBuildProjectDirectory)\Client"
       Command="npm run build" />

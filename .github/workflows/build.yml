@@ -1,5 +1,5 @@
-# Runs in the public mirror of the icon sets. The framework arrives as a package here, so this also proves
-# that the version these sets are built against is really on the feed.
+# Runs in the public mirror of the icon set. The framework arrives as a package here, so this also proves
+# that the version this set is built against is really on the feed.
 name: Build
 
 on:

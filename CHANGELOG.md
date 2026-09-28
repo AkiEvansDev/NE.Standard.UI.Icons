@@ -4,6 +4,30 @@ One section per release of this slice, headed `## X.Y.Z` and named by the tag �
 workflow cuts the matching section out to become the body of the GitHub release, and a tag with no section
 fails the release before anything is published.
 
+## 1.0.1
+
+- **The first stable release.** No `--prerelease` is needed any more. Until 2.0.0 the public surface may still move
+  between versions; every such change is marked **Breaking:** in this file.
+- **Breaking: the Lucide packages are no longer released.** `NE.Standard.UI.Icons.Lucide` and
+  `NE.Standard.UI.Web.Icons.Lucide` stop at `1.0.0-rc.3`, deprecated and frozen since then; this slice is Material Symbols
+  alone. An application on them moves to Material: `AddMaterialWebIcons` in place of `AddLucideWebIcons`, and the
+  `MaterialIcons` constants in place of `LucideIcons` — the names differ, so each glyph is chosen again. The demo's `/lucide` page goes with them.
+- **The icon stylesheet and the Material font are served under `/_ne/`** — `/_ne/css/ui-icons-material.css` and
+  `/_ne/fonts/ui-icons-material.woff2` — with every path of the framework's own (see the core's
+  changelog), so an application's routes and a proxy's rules have one prefix to leave alone. A page links them itself; a host
+  that named the old `/css/` or `/fonts/` paths, in a CSP or a cache rule, names the new ones.
+- **The Material packages bring their namespaces as global usings.** Installing them is enough to write
+  `MaterialIcons.Settings` and `AddMaterialWebIcons(...)`; a project that would rather write its own `using` lines sets
+  `NEStandardUIImplicitUsings` to `false`.
+- **The mirror's demo builds against the framework's packages.** It reached this slice's own namespaces only through
+  the monorepo's usings, and this slice's sources wrote `using` lines the framework's packages now bring, which is
+  IDE0005; `Directory.Build.targets` travels to the mirror and a package's sources keep their own lines.
+- The README's licence link names the mirror, so it resolves on nuget.org too.
+- **The packages carry their symbols and sources inside their assemblies**, so a debugger steps into them.
+- **Material Symbols 0.47.5**: 24 new glyphs in `MaterialIcons` and the font (`AppsPlus`, `FilterPlus`, `MarkdownDocument`…); none removed.
+- **A misspelt glyph fails at startup beside the whole set too.** A name registered alongside `MaterialIconScope.All`
+  was never checked; it now throws when the stylesheet is built, as it does without `All`.
+
 ## 1.0.0-rc.3
 
 The glyphs are unchanged since `1.0.0-preview.2`; what moved is how a set registers itself.

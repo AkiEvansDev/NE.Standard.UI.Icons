@@ -10,7 +10,7 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// </summary>
 /// <remarks>
 /// The font carries every glyph already, so registration decides which classes exist (an unregistered name
-/// draws nothing) rather than what downloads. The font ships as its own asset, not inlined, since a 382 KB
+/// draws nothing) rather than what downloads. The font ships as its own asset, not inlined, since a 386 KB
 /// <c>woff2</c> as base64 couldn't be cached apart from the stylesheet's rules.
 /// </remarks>
 internal static class MaterialIconStylesheet
@@ -49,20 +49,20 @@ internal static class MaterialIconStylesheet
             .Append(fontPath)
             .AppendLine("\") format(\"woff2\"); }");
 
-        if (registration.IncludesEverything)
-        {
-            foreach (var name in MaterialIconNames.All)
-                AppendGlyph(builder, registration, name);
-
-            return builder.ToString();
-        }
-
         foreach (var name in registration.Names)
         {
             if (!MaterialIconNames.Contains(name))
                 throw new InvalidOperationException($"Material glyph 'ms-{name}' does not exist. Use the MaterialIcons constants — a misspelt name would otherwise render as nothing.");
 
-            AppendGlyph(builder, registration, name);
+            // Beside the whole set a named glyph is only checked, so a misspelling fails at startup either way; the set writes its rule.
+            if (!registration.IncludesEverything)
+                AppendGlyph(builder, registration, name);
+        }
+
+        if (registration.IncludesEverything)
+        {
+            foreach (var name in MaterialIconNames.All)
+                AppendGlyph(builder, registration, name);
         }
 
         return builder.ToString();

@@ -16,6 +16,10 @@
     <RepositoryUrl>https://github.com/AkiEvansDev/NE.Standard.UI.Icons</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+    <!-- Symbols and sources inside the assembly, since no commit hash can point a debugger at the mirror: a consumer steps
+         into the package and reads its line numbers with nothing else to download. -->
+    <DebugType>embedded</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
     <!-- MIT, not the framework's Prosperity: an icon table is a table of names, and there is no reason for
          it to carry a licence anyone has to read. OSI-approved, so it travels as an expression. -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

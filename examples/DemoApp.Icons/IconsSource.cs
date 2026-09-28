@@ -2,11 +2,6 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using NE.Standard.UI.Abstractions.Binding;
-using NE.Standard.UI.Abstractions.Data;
-using NE.Standard.UI.Abstractions.Recursive;
-using NE.Standard.UI.Data;
-using NE.Standard.UI.Primitives.Annotations;
 
 namespace DemoApp.Icons;
 
@@ -25,29 +20,28 @@ internal sealed partial class IconItem : RecursiveObservable, IBindableItem
     [RecursiveMember]
     public partial string Glyph { get; set; } = string.Empty;
 
-    /// <summary>Which drawing the tile shows; empty for a set that has only one.</summary>
+    /// <summary>Which drawing the tile shows.</summary>
     [RecursiveMember]
     public partial string Style { get; set; } = string.Empty;
 }
 
 /// <summary>
-/// What the gallery's rules resolved to, read off the query a window request carries, over the set the page stands for.
+/// What the gallery's rules resolved to, read off the query a window request carries.
 /// </summary>
-internal readonly record struct IconsQuery(string Set, string Style, string Text)
+internal readonly record struct IconsQuery(string Style, string Text)
 {
     /// <summary>The gallery as it opens, and what a request with no terms means.</summary>
-    public static IconsQuery Default(string set)
-        => new(set, IconsCatalog.FilledStyle, string.Empty);
+    public static IconsQuery Default { get; } = new(IconsCatalog.FilledStyle, string.Empty);
 
     /// <summary>
     /// Reads the terms this source understands; a rule that is not active contributes none, which is what makes
     /// an empty search box mean "everything".
     /// </summary>
-    public static IconsQuery Read(UIItemsQuery query, string set)
+    public static IconsQuery Read(UIItemsQuery query)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IconsQuery result = Default(set);
+        IconsQuery result = Default;
 
         for (var i = 0; i < query.Filters.Length; i++)
         {
@@ -67,20 +61,20 @@ internal readonly record struct IconsQuery(string Set, string Style, string Text
 }
 
 /// <summary>
-/// A set's names, a window at a time: the search is resolved on the server, so the browser never holds
+/// The set's names, a window at a time: the search is resolved on the server, so the browser never holds
 /// four thousand tiles to filter.
 /// </summary>
-internal sealed partial class IconsSource(string set) : UIItemSourceBase<IconItem>
+internal sealed partial class IconsSource : UIItemSourceBase<IconItem>
 {
     /// <summary>What the line under the search box reads. The source writes it because it is what counts.</summary>
     [RecursiveMember]
-    public partial string Caption { get; set; } = Describe(IconsQuery.Default(set), IconsCatalog.Count(set));
+    public partial string Caption { get; set; } = Describe(IconsQuery.Default, IconsCatalog.Count);
 
     protected override Task<UIItemWindow<IconItem>> GetWindowAsync(UIItemWindowRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        IconsQuery query = IconsQuery.Read(request.Query, set);
+        IconsQuery query = IconsQuery.Read(request.Query);
         IconName[] matches = IconsCatalog.Match(query);
         var total = matches.Length;
 
@@ -119,17 +113,15 @@ internal sealed partial class IconsSource(string set) : UIItemSourceBase<IconIte
             Id = name.Glyph,
             Name = name.Name,
             Glyph = IconsCatalog.Draw(name, query),
-            // Lucide draws one way, so its tiles carry no drawing and its page has no selector for one.
-            Style = query.Set == IconsCatalog.MaterialSet ? query.Style : string.Empty
+            Style = query.Style
         };
 
     private static string Describe(IconsQuery query, int total)
     {
-        var set = query.Set == IconsCatalog.LucideSet ? "Lucide" : "Material Symbols";
-        var whole = IconsCatalog.Count(query.Set);
+        var whole = IconsCatalog.Count;
 
         return query.Text.Length == 0
-            ? string.Create(CultureInfo.InvariantCulture, $"{whole:N0} names in {set}.")
-            : string.Create(CultureInfo.InvariantCulture, $"{total:N0} of {whole:N0} names in {set} match “{query.Text}”.");
+            ? string.Create(CultureInfo.InvariantCulture, $"{whole:N0} names in Material Symbols.")
+            : string.Create(CultureInfo.InvariantCulture, $"{total:N0} of {whole:N0} names in Material Symbols match “{query.Text}”.");
     }
 }
