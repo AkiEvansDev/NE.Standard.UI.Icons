@@ -4,6 +4,39 @@ One section per release of this slice, headed `## X.Y.Z` and named by the tag �
 workflow cuts the matching section out to become the body of the GitHub release, and a tag with no section
 fails the release before anything is published.
 
+## 1.3.0
+
+- **An outlined value registers as it is.** `AddMaterialWebIcons(MaterialIcons.Outlined(MaterialIcons.Save))` failed the host's
+  start with "does not exist"; the pack now takes the suffix off and serves that glyph's outlined drawing — that one name's
+  only, so one outlined button beside `MaterialIconScope.All` adds one rule rather than the whole outlined set (over half a
+  megabyte). `MaterialIconRegistration.OutlinedNames` lists them; `MaterialIconStyle.Outlined` still serves every name's.
+- **A name no registration covers draws nothing**, as the README always said — an outlined value whose drawing was not
+  registered, a name from data, a misspelt `ne-` mark — rather than a filled square in the text colour: the core's icon
+  now paints a tinted picture alone.
+- **A glyph's rule is the class the framework's icon value wears**, built by `WebIconClassName.FromIconName` rather than a prefix
+  of the pack's own, and a test holds each of the three properties it sets (`--ui-icon-font`, `--ui-icon-glyph`,
+  `--ui-icon-fill`) to one the core's `.ui-icon::before` reads. It no longer writes `--ui-icon-paint`, which the core stopped
+  reading.
+- **The font is preloaded by every page's head** (the framework's 1.3.0), fetched once and cached for a year under its
+  versioned address, so a glyph is not a blank box for an extra round trip on a cold load.
+- **A registration with no drawing fails beside an outlined value too.** `Add(0, MaterialIcons.Settings,
+  MaterialIcons.Outlined(MaterialIcons.Save))`, or the whole set with no style beside an outlined value, started the host and
+  left every name but the outlined one without a rule; only an outlined value now draws without a style.
+- A glyph is silent to a screen reader: a titled button is named by its title, not "save Save changes".
+- A misspelt name's startup error names the glyph as Material names it (`'settingz'`), whatever prefix or suffix it was written
+  with.
+- The generator refuses a Material glyph whose own name ends in `_outlined`, which the outlined suffix would take for its own.
+- The README's size of the whole set is the measured one — over half a megabyte of CSS per drawing, not three megabytes — and
+  a test holds the font's size in it to the embedded font.
+- The demo's search box clears with the field's own cross instead of a button of its own, and a tile writes the value its
+  constant holds under the name instead of in a tooltip on the glyph; both lines wrap, so a long name or value reads whole.
+- The demo speaks Chinese as well: a language switcher in the header and a whole zh-Hans table of its own words and the
+  framework's; a tile's name and value are content, shown as written in every language, and the count under the search box is
+  a phrase of the page's language.
+- The demo's gallery lays six tiles to a line on a wide screen rather than eight (four, then two, narrower), so a long name's
+  caption no longer breaks in the middle of a word; the search, the style select and the count wrap to a second line on a narrow
+  screen rather than running off it.
+
 ## 1.2.0
 
 - **Built on the framework's 1.2.0.** Nothing of this package's own changed; it moves with the framework.

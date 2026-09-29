@@ -1,8 +1,8 @@
 namespace DemoApp.Icons;
 
 /// <summary>
-/// What every page of the demo wears: the title band with the theme switcher, the sidebar naming the pages, and the page's own
-/// content filling what is left.
+/// What every page of the demo wears: the title band with the language and theme switchers, the sidebar naming the pages, and the
+/// page's own content filling what is left.
 /// </summary>
 public abstract class IconsDemoView : UIViewBase
 {
@@ -13,7 +13,7 @@ public abstract class IconsDemoView : UIViewBase
 
     private static readonly (string Route, string Label)[] Pages =
     [
-        (MaterialRoute, "Material Symbols")
+        (MaterialRoute, "icons-demo.material.title")
     ];
 
     /// <summary>The title band and the sidebar stand, the sidebar from the top of the page; the content scrolls by itself.</summary>
@@ -23,11 +23,16 @@ public abstract class IconsDemoView : UIViewBase
     public abstract override string Title { get; }
     protected abstract string Description { get; }
 
-    /// <summary>The page band from the preset; the theme switcher wears Material's outlined pair, which the gallery registers whole.</summary>
+    /// <summary>
+    /// The page band from the preset; the language and theme switchers are on every page, since both are the framework's state. The
+    /// theme switcher wears Material's outlined pair, which the gallery registers whole.
+    /// </summary>
     protected override IVisualComponent? CreateHeader()
-        => UIPage.Header(Title, Description, new ThemeSwitcherComponent()
-            .SetLightIcon(MaterialIcons.Outlined(MaterialIcons.LightMode))
-            .SetDarkIcon(MaterialIcons.Outlined(MaterialIcons.DarkMode))
+        => UIPage.Header(Title, Description,
+            new LanguageSwitcherComponent(),
+            new ThemeSwitcherComponent()
+                .SetLightIcon(MaterialIcons.Outlined(MaterialIcons.LightMode))
+                .SetDarkIcon(MaterialIcons.Outlined(MaterialIcons.DarkMode))
         );
 
     /// <summary>The sidebar every page wears: one entry per page, the one being read marked.</summary>

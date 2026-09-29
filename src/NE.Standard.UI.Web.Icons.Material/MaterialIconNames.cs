@@ -19,7 +19,8 @@ internal static class MaterialIconNames
     /// <summary>What the outlined drawing adds to a glyph's class. The same suffix the authoring side uses.</summary>
     public const string OutlinedSuffix = MaterialIcons.OutlinedSuffix;
 
-    private const string Prefix = "ms-";
+    /// <summary>What every constant's value opens with, keeping a glyph class apart from the framework's <c>ne-</c> marks.</summary>
+    public const string Prefix = "ms-";
 
     private static readonly FrozenSet<string> Known = Read();
 

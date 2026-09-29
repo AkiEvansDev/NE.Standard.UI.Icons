@@ -6,9 +6,8 @@ namespace NE.Standard.UI.Icons.Material;
 /// The hand-written half of <see cref="MaterialIcons"/>: how a name says which of the two drawings it wants.
 /// </summary>
 /// <remarks>
-/// Both styles share the same names, told apart by a suffix on the glyph value — <c>MaterialIconStylesheet</c> emits
-/// <c>ms-edit</c> and <c>ms-edit-outlined</c> from one registered name. Registering only <c>MaterialIconStyle.Fill</c> and
-/// asking for the outlined glyph draws nothing, the same failure as a misspelt name.
+/// The outlined drawing (<c>ms-edit-outlined</c>) draws only where its value or <c>MaterialIconStyle.Outlined</c> is registered;
+/// otherwise it draws nothing, like a misspelt name.
 /// </remarks>
 public static partial class MaterialIcons
 {

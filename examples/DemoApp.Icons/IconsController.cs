@@ -32,8 +32,4 @@ internal sealed partial class IconsController : UIControllerBase
     /// </remarks>
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         => await Icons.LoadWindowAsync(new UIItemWindowRequest(UIItemAnchor.Start, WindowSize), cancellationToken).ConfigureAwait(false);
-
-    [UICommand]
-    public void ClearSearch()
-        => Search = string.Empty;
 }

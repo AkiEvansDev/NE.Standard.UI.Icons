@@ -3,10 +3,10 @@
 //
 // A font, not SVGs: the same glyph rasterises through the sharper text path instead of the image path at
 // 14-16px. Keeping `FILL` and `opsz` as font axes serves the outlined drawing and small-size rendering from
-// one file instead of separate 700 KB tables.
+// one file instead of a table per drawing.
 //
-// `wght` and `GRAD` are pinned, since a UI never varies either — that takes the file from 5.3 MB to 386 KB
-// while keeping all 3 927 glyphs.
+// `wght` and `GRAD` are pinned, since a UI never varies either — that takes the file to under a tenth of its
+// size while keeping every glyph.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -17,6 +17,9 @@ const NAME_SOURCE = "node_modules/material-symbols/index.d.ts";
 const DIST = "dist";
 const FONT = "ui-icons-material.woff2";
 const NAMES = "../../NE.Standard.UI.Icons.Material/MaterialIcons.cs";
+
+// The outlined drawing is a glyph's value plus this suffix (MaterialIcons.OutlinedSuffix, spelt with the ligature's `_`).
+const OUTLINED = "_outlined";
 
 // Reserved words a glyph name would collide with as a C# identifier; a name that starts with a digit takes an `N`
 // in toIdentifier. Everything else PascalCases cleanly.
@@ -45,6 +48,12 @@ function readNames() {
 
     if (names.length === 0)
         throw new Error(`No glyph names were found in ${NAME_SOURCE}.`);
+
+    // Registration strips the suffix to find the glyph, so a glyph whose own name ends in it could not be told apart.
+    const clash = names.find(name => name.endsWith(OUTLINED));
+
+    if (clash !== undefined)
+        throw new Error(`Glyph '${clash}' ends in '${OUTLINED}', which the outlined drawing's suffix would take for its own.`);
 
     return names.sort();
 }
@@ -88,8 +97,7 @@ namespace NE.Standard.UI.Icons.Material;
 /// the value, keeping a glyph class apart from the framework's <c>ne-</c> marks and an application's own classes.
 /// Which of these a page can draw is what the application registers; see <c>AddMaterialWebIcons</c>.
 /// <para>
-/// Partial: the outlined drawing of any of these is the same name plus a suffix, written by hand in
-/// MaterialIconStyles.cs.
+/// The outlined drawing of any of these is <see cref="Outlined(string)"/>.
 /// </para>
 /// </summary>
 public static partial class MaterialIcons

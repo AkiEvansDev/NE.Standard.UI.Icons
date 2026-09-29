@@ -9,7 +9,7 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// </summary>
 public enum MaterialIconScope
 {
-    /// <summary>Every glyph the pack knows — around half a megabyte of stylesheet per style.</summary>
+    /// <summary>Every glyph the pack knows — over half a megabyte of stylesheet per drawing.</summary>
     All
 }
 
@@ -21,8 +21,7 @@ public static class MaterialWebIconExtensions
     private const string FontPath = "/_ne/fonts/ui-icons-material.woff2";
 
     /// <summary>
-    /// Serves the named Material glyphs. Callable multiple times — each feature can register its own icons,
-    /// and the pack builds one stylesheet from all of them.
+    /// Serves the named Material glyphs; each feature may call it, and the pack builds one stylesheet from all.
     /// </summary>
     public static IServiceCollection AddMaterialWebIcons(this IServiceCollection services, MaterialIconStyle style, params string[] names)
     {
@@ -63,8 +62,8 @@ public static class MaterialWebIconExtensions
         if (!added)
             return registration;
 
-        // The font is its own asset, not a data URI in the stylesheet — 386 KB of woff2 becomes 515 KB of
-        // base64, uncacheable apart from rules that change with every registration.
+        // The font is its own asset, not a data URI in the stylesheet: base64 grows it by a third, and it could not be
+        // cached apart from rules that change with every registration.
         WebAssetDescriptor font = new()
         {
             Key = FontKey,

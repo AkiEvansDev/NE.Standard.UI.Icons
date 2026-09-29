@@ -1,18 +1,13 @@
 using System;
 using System.Globalization;
 using System.Text;
+using NE.Standard.UI.Web.Abstractions.Theming;
 
 namespace NE.Standard.UI.Web.Icons.Material;
 
 /// <summary>
-/// Builds the pack's stylesheet from the glyphs an application registered: the <c>@font-face</c> the font is
-/// reached through, and one rule per glyph naming the ligature that draws it.
+/// Builds the pack's stylesheet: the <c>@font-face</c> and one rule per registered glyph.
 /// </summary>
-/// <remarks>
-/// The font carries every glyph already, so registration decides which classes exist (an unregistered name
-/// draws nothing) rather than what downloads. The font ships as its own asset, not inlined, since a 386 KB
-/// <c>woff2</c> as base64 couldn't be cached apart from the stylesheet's rules.
-/// </remarks>
 internal static class MaterialIconStylesheet
 {
     /// <summary>The family the <c>@font-face</c> declares. Prefixed, because a page may host several packs.</summary>
@@ -23,7 +18,8 @@ internal static class MaterialIconStylesheet
         ArgumentNullException.ThrowIfNull(registration);
         ArgumentException.ThrowIfNullOrWhiteSpace(fontPath);
 
-        if (registration.Styles == 0)
+        // Only an outlined value draws without a style; the whole set or a plain name beside it would have no rule.
+        if (registration.Styles == 0 && (registration.IncludesEverything || registration.HasPlainName))
             throw new InvalidOperationException("The Material icon pack was registered without a style. Pass MaterialIconStyle.Fill, Outlined, or both.");
 
         if (!registration.IncludesEverything && registration.Names.Count == 0)
@@ -52,7 +48,7 @@ internal static class MaterialIconStylesheet
         foreach (var name in registration.Names)
         {
             if (!MaterialIconNames.Contains(name))
-                throw new InvalidOperationException($"Material glyph 'ms-{name}' does not exist. Use the MaterialIcons constants — a misspelt name would otherwise render as nothing.");
+                throw new InvalidOperationException($"Material has no glyph named '{name}'. Use the MaterialIcons constants — a misspelt name would otherwise render as nothing.");
 
             // Beside the whole set a named glyph is only checked, so a misspelling fails at startup either way; the set writes its rule.
             if (!registration.IncludesEverything)
@@ -69,7 +65,7 @@ internal static class MaterialIconStylesheet
     }
 
     /// <summary>
-    /// Both drawings of one glyph, told apart only by a suffix on the class: filled and outlined are the same
+    /// The drawings one glyph is served in, told apart only by a suffix on the class: filled and outlined are the same
     /// ligature at opposite ends of the font's <c>FILL</c> axis.
     /// </summary>
     private static void AppendGlyph(StringBuilder builder, MaterialIconRegistration registration, string name)
@@ -77,15 +73,16 @@ internal static class MaterialIconStylesheet
         if (registration.Styles.HasFlag(MaterialIconStyle.Fill))
             AppendRule(builder, name, suffix: string.Empty, fill: 1);
 
-        if (registration.Styles.HasFlag(MaterialIconStyle.Outlined))
+        // An outlined value asks for its own outlined drawing only; the whole set in both drawings is the style's to ask for.
+        if (registration.Styles.HasFlag(MaterialIconStyle.Outlined) || registration.OutlinedNames.Contains(name))
             AppendRule(builder, name, MaterialIconNames.OutlinedSuffix, fill: 0);
     }
 
+    /// <summary>One glyph's rule: the properties <c>.ui-icon::before</c> reads (MECHANISMS §7).</summary>
     private static void AppendRule(StringBuilder builder, string name, string suffix, int fill)
         => builder
-            .Append(".ui-icon-glyph--ms-")
-            .Append(name)
-            .Append(suffix)
+            .Append('.')
+            .Append(WebIconClassName.FromIconName(MaterialIconNames.Prefix + name + suffix))
             .Append(" { --ui-icon-font: \"")
             .Append(FontFamily)
             .Append("\"; --ui-icon-glyph: \"")
@@ -94,7 +91,5 @@ internal static class MaterialIconStylesheet
             .Append(name.Replace('-', '_'))
             .Append("\"; --ui-icon-fill: ")
             .Append(fill.ToString(CultureInfo.InvariantCulture))
-            // A glyph is text and takes the element's colour; its box paints nothing — mask forms default to
-            // painting, so this form opts out.
-            .AppendLine("; --ui-icon-paint: transparent; }");
+            .AppendLine("; }");
 }

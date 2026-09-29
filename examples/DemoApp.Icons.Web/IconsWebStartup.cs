@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DemoApp.Icons.Web;
@@ -6,13 +5,5 @@ namespace DemoApp.Icons.Web;
 internal sealed class IconsWebStartup : WebStartupBase<IconsAppStartup>
 {
     protected override void ConfigureServices(IServiceCollection services)
-    {
-        ArgumentNullException.ThrowIfNull(services);
-
-        _ = services.AddStandardRenderers();
-
-        // The gallery is the one case a registration cannot cover: it draws every name there is, in both of
-        // Material's drawings — about a megabyte and a half of stylesheet that no application would ask for.
-        _ = services.AddMaterialWebIcons(MaterialIconScope.All, MaterialIconStyle.Fill | MaterialIconStyle.Outlined);
-    }
+        => IconsWebServices.Register(services);
 }

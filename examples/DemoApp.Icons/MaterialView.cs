@@ -13,10 +13,9 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
 
     protected override string Route => MaterialRoute;
 
-    public override string Title => "Material Symbols";
+    public override string Title => "icons-demo.material.title";
 
-    protected override string Description
-        => "Every name in the set, read off the package itself. A tile's caption is the constant an author writes; hover the glyph for the value it resolves to.";
+    protected override string Description => "icons-demo.material.description";
 
     /// <summary>The controls above the gallery, then the gallery filling what is left.</summary>
     protected override IVisualComponent CreateContent()
@@ -28,33 +27,29 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
             .AddChild(CreateControls().SetPlacement(1, 1, 24, 1))
             .AddChild(CreateGallery().SetPlacement(1, 2, 24, 1));
 
-    /// <summary>The search box, the drawing selector, the clear button and the count.</summary>
+    /// <summary>The search box, the drawing selector and the count, wrapping onto a second line where the three do not fit.</summary>
     private static StackPanelComponent CreateControls()
         => new StackPanelComponent()
             .SetOrientation(UIOrientation.Horizontal)
             .SetSpacing(16)
+            .SetWrap(true)
             .SetVerticalAlignment(UIAlignment.Center)
             .SetMargin(UIThickness.All(0, 0, 0, 12))
             .AddChild(new TextInputComponent(SearchId)
-                .SetPlaceholder("Search by name or glyph…")
+                .SetPlaceholder("icons-demo.search.placeholder")
                 .SetPrefixIcon(MaterialIcons.Search)
+                .SetShowClearButton()
                 .BindValue(nameof(IconsController.Search))
                 .SetDebounceMilliseconds(250)
                 .SetWidth(UILayoutLength.Absolute(320))
             )
             .AddChild(new SelectComponent(StyleId)
                 .SetOptions([
-                    new OptionItem { Id = IconsCatalog.FilledStyle, Title = "Filled" },
-                    new OptionItem { Id = IconsCatalog.OutlinedStyle, Title = "Outlined" }
+                    new OptionItem { Id = IconsCatalog.FilledStyle, Title = "icons-demo.style.filled" },
+                    new OptionItem { Id = IconsCatalog.OutlinedStyle, Title = "icons-demo.style.outlined" }
                 ])
                 .BindValue(nameof(IconsController.Style))
                 .SetWidth(UILayoutLength.Absolute(160))
-            )
-            .AddChild(new ButtonComponent()
-                .SetTitle("Clear")
-                .SetType(UIButtonType.Ghost)
-                .OnClick(nameof(IconsController.ClearSearch))
-                .SetVerticalAlignment(UIAlignment.Center)
             )
             .AddChild(new TextComponent()
                 .BindTitle($"{nameof(IconsController.Icons)}.{nameof(IconsSource.Caption)}")
@@ -74,7 +69,7 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
             .SetSpacing(12)
             .SetHeight(UILayoutLength.Fill())
             .SetTemplate(CreateTile())
-            .ConfigureDefaultEmptyTemplate(empty => empty.SetTitle("No name matches."))
+            .ConfigureDefaultEmptyTemplate(empty => empty.SetTitle("icons-demo.empty"))
             .FilterBy(StyleId, IInputComponent.ValueProperty, nameof(IconItem.Style), UIComparisonOperator.Equal);
 
     private static ContainerComponent CreateTile()
@@ -92,14 +87,23 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                 .SetPlacement(1, 1, 24, 1)
                 .AddChild(new IconComponent()
                     .BindIcon(nameof(IconItem.Glyph), UIBindingScope.Relative)
-                    .BindTooltip(nameof(IconItem.Glyph), UIBindingScope.Relative)
                     .SetSize(UIIconSize.Large)
                 )
-                .AddChild(new TextComponent()
-                    .BindTitle(nameof(IconItem.Name), UIBindingScope.Relative)
-                    .SetTitleType(UITextAppearance.Caption)
-                    .SetHorizontalAlignment(UIAlignment.Center)
+                // Paragraphs, which wrap: a name or a value cut behind an ellipsis could not be read whole, and it is what an author copies.
+                .AddChild(new ParagraphComponent()
+                    .BindDescription(nameof(IconItem.Name), UIBindingScope.Relative)
+                    .SetDescriptionType(UITextAppearance.Caption)
+                    .SetTextAlignment(UITextAlignment.Center)
+                )
+                // Written out rather than in a tooltip, so the value is there for a keyboard, a touch and a reader too.
+                .AddChild(new ParagraphComponent()
+                    .BindDescription(nameof(IconItem.Glyph), UIBindingScope.Relative)
+                    .SetDescriptionType(UITextAppearance.Caption)
+                    .SetDescriptionColor(UIThemeColor.FromStyle(UIColorStyle.Muted))
+                    .SetTextAlignment(UITextAlignment.Center)
                 )
             )
-            .SetPlacement(1, 1, 3, 1);
+            // Six to a line on a wide screen rather than eight: at an eighth a name's caption broke mid-word, and it cannot break at its
+            // case boundaries without a character that would travel with the name when an author copies it.
+            .SetPlacement(1, 1, 12, 1, sm: UIGridPlacement.At(1, 1, 6, 1), xl: UIGridPlacement.At(1, 1, 4, 1));
 }

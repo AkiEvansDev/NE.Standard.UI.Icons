@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 namespace DemoApp.Icons;
 
 /// <summary>
-/// One tile: the constant an author writes, and the value that draws it.
+/// One tile: the constant an author writes, and the value that draws it — content, shown as written in every language.
 /// </summary>
-internal sealed partial class IconItem : RecursiveObservable, IBindableItem
+internal sealed partial class IconItem : RecursiveObservable, IBindableItem, IContentItem
 {
     /// <summary>The glyph without a drawing's suffix, so a tile keeps its identity when the drawing changes.</summary>
     [RecursiveMember(false)]
     public required string Id { get; init; }
+
+    /// <summary>A name and a value are what an author copies, never a translation key.</summary>
+    [RecursiveMember(false)]
+    public bool IsContent => true;
 
     [RecursiveMember]
     public partial string Name { get; set; } = string.Empty;
@@ -68,7 +72,7 @@ internal sealed partial class IconsSource : UIItemSourceBase<IconItem>
 {
     /// <summary>What the line under the search box reads. The source writes it because it is what counts.</summary>
     [RecursiveMember]
-    public partial string Caption { get; set; } = Describe(IconsQuery.Default, IconsCatalog.Count);
+    public partial UIPhrase Caption { get; set; } = Describe(IconsQuery.Default, IconsCatalog.Count);
 
     protected override Task<UIItemWindow<IconItem>> GetWindowAsync(UIItemWindowRequest request, CancellationToken cancellationToken)
     {
@@ -116,12 +120,9 @@ internal sealed partial class IconsSource : UIItemSourceBase<IconItem>
             Style = query.Style
         };
 
-    private static string Describe(IconsQuery query, int total)
-    {
-        var whole = IconsCatalog.Count;
-
-        return query.Text.Length == 0
-            ? string.Create(CultureInfo.InvariantCulture, $"{whole:N0} names in Material Symbols.")
-            : string.Create(CultureInfo.InvariantCulture, $"{total:N0} of {whole:N0} names in Material Symbols match “{query.Text}”.");
-    }
+    /// <summary>The caption's phrase; the query is the reader's own text, so it goes in as written.</summary>
+    private static UIPhrase Describe(IconsQuery query, int total)
+        => query.Text.Length == 0
+            ? UIPhrase.Of("icons-demo.caption.all", ("count", total))
+            : UIPhrase.Of("icons-demo.caption.matches", ("count", total), ("whole", IconsCatalog.Count), ("query", query.Text));
 }

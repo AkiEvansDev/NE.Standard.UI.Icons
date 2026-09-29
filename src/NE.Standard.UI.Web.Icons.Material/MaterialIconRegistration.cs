@@ -5,30 +5,35 @@ using NE.Standard.UI.Web.Abstractions.Assets;
 namespace NE.Standard.UI.Web.Icons.Material;
 
 /// <summary>
-/// What an application asked the Material pack for, accumulated across every <c>AddMaterialWebIcons</c> call
-/// and read once when the stylesheet is built.
+/// What an application asked the Material pack for, across every <c>AddMaterialWebIcons</c> call.
 /// </summary>
 /// <remarks>
-/// Registration decides which glyph *classes* exist, not what's downloaded — the font already carries every
-/// glyph — but writing all 3 927 classes would still bloat the stylesheet, so an unregistered name is still
-/// worth failing on.
+/// Registration decides which glyph classes exist, not what's downloaded; a rule for every glyph would bloat the stylesheet,
+/// so an unregistered name is worth failing on.
 /// </remarks>
 public sealed class MaterialIconRegistration
 {
     private readonly HashSet<string> _names = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _outlinedNames = new(StringComparer.Ordinal);
 
     /// <summary>Whether the application asked for the whole set rather than naming glyphs.</summary>
     public bool IncludesEverything { get; private set; }
 
-    /// <summary>Which drawings are served, combined across every call.</summary>
+    /// <summary>Which drawings every registered name is served in, combined across every call.</summary>
     public MaterialIconStyle Styles { get; private set; }
 
-    /// <summary>The glyph names asked for, without the <c>ms-</c> prefix the constants carry.</summary>
+    /// <summary>The glyph names asked for, as Material names them: no <c>ms-</c> prefix, no outlined suffix.</summary>
     public IReadOnlyCollection<string> Names => _names;
 
+    /// <summary>The names asked for by their outlined value, each served outlined whatever <see cref="Styles"/> says.</summary>
+    public IReadOnlySet<string> OutlinedNames => _outlinedNames;
+
+    /// <summary>Whether some name was asked for by its plain value, which draws only in <see cref="Styles"/>.</summary>
+    internal bool HasPlainName { get; private set; }
+
     /// <summary>
-    /// Adds glyphs to what the application serves, named by the <c>MaterialIcons</c> constants; an unknown
-    /// name throws rather than silently drawing nothing.
+    /// Adds glyphs named by the <c>MaterialIcons</c> constants (an unknown one fails the startup); an outlined value serves that
+    /// glyph's outlined drawing, not every name's.
     /// </summary>
     public MaterialIconRegistration Add(MaterialIconStyle styles, params string[] names)
     {
@@ -39,7 +44,14 @@ public sealed class MaterialIconRegistration
         foreach (var name in names)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(name);
-            _ = _names.Add(Normalize(name));
+
+            var glyph = Normalize(name, out var outlined);
+            _ = _names.Add(glyph);
+
+            if (outlined)
+                _ = _outlinedNames.Add(glyph);
+            else
+                HasPlainName = true;
         }
 
         return this;
@@ -58,9 +70,14 @@ public sealed class MaterialIconRegistration
     }
 
     /// <summary>
-    /// Strips the <c>ms-</c> the constants carry, which keeps the glyph class apart from the framework's <c>ne-</c> marks,
-    /// so the table stays keyed by Material's own name.
+    /// Strips the <c>ms-</c> prefix and the outlined suffix, so the table is keyed by Material's own name; says whether
+    /// the suffix was there.
     /// </summary>
-    internal static string Normalize(string name)
-        => WebPackageRegistration.NormalizeIconName(name, "ms-");
+    internal static string Normalize(string name, out bool outlined)
+    {
+        var glyph = WebPackageRegistration.NormalizeIconName(name, MaterialIconNames.Prefix);
+        outlined = glyph.EndsWith(MaterialIconNames.OutlinedSuffix, StringComparison.Ordinal);
+
+        return outlined ? glyph[..^MaterialIconNames.OutlinedSuffix.Length] : glyph;
+    }
 }

@@ -8,8 +8,7 @@ namespace NE.Standard.UI.Icons.Material;
 /// the value, keeping a glyph class apart from the framework's <c>ne-</c> marks and an application's own classes.
 /// Which of these a page can draw is what the application registers; see <c>AddMaterialWebIcons</c>.
 /// <para>
-/// Partial: the outlined drawing of any of these is the same name plus a suffix, written by hand in
-/// MaterialIconStyles.cs.
+/// The outlined drawing of any of these is <see cref="Outlined(string)"/>.
 /// </para>
 /// </summary>
 public static partial class MaterialIcons

@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>NE.Standard.UI.Web.Icons.Material</PackageId>
-    <Description>Material Symbols Rounded for the NE.Standard UI web platform. One 386 KB variable font ships embedded — every glyph, with FILL and the optical size still axes — and the stylesheet is built at startup from the glyphs the application registers. MIT, unlike the framework it plugs into; the font itself is Apache-2.0.</Description>
+    <Description>Material Symbols Rounded for the NE.Standard UI web platform. One variable font ships embedded — every glyph, with FILL and the optical size still axes — and the stylesheet is built at startup from the glyphs the application registers. MIT, unlike the framework it plugs into; the font itself is Apache-2.0.</Description>
     <PackageTags>NE.Standard,UI,Web,Icons,Material</PackageTags>
   </PropertyGroup>
 
