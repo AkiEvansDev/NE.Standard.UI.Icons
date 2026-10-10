@@ -43,20 +43,16 @@
     <MaterialIconFont>$(MSBuildProjectDirectory)\Client\dist\ui-icons-material.woff2</MaterialIconFont>
   </PropertyGroup>
 
-  <!-- Installed again whenever the lockfile is newer than the install, not only when there is none: a dependency added
-       later (a linter, a bumped tool) would otherwise be missing from a clone that had restored before it. -->
-  <Target Name="RestoreMaterialIconPackages" Condition="'$(SkipWebIconBuild)' != 'true'" Inputs="$(MSBuildProjectDirectory)\Client\package-lock.json" Outputs="$(MSBuildProjectDirectory)\Client\node_modules\.package-lock.json">
-    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\Client" Command="npm install" />
-    <Touch Files="$(MSBuildProjectDirectory)\Client\node_modules\.package-lock.json" AlwaysCreate="true" />
-  </Target>
+  <!-- The font builds as part of dotnet build (WebClient.targets, imported from Directory.Build.targets), under the switch every
+       client builds under; the font is committed, so `SkipWebClientBuild` builds without Node here too. It has no tests. -->
+  <PropertyGroup>
+    <BuildsWebClient>true</BuildsWebClient>
+    <WebClientTests>false</WebClientTests>
+  </PropertyGroup>
 
-  <Target Name="BuildMaterialIconAssets" BeforeTargets="PrepareResources" DependsOnTargets="RestoreMaterialIconPackages" Condition="'$(SkipWebIconBuild)' != 'true'">
-    <Exec
-      WorkingDirectory="$(MSBuildProjectDirectory)\Client"
-      Command="npm run build" />
-
-    <Error Condition="!Exists('$(MaterialIconFont)')" Text="Material icon font was not generated: $(MaterialIconFont)" />
-  </Target>
+  <ItemGroup>
+    <WebClientOutput Include="$(MaterialIconFont)" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="$(MaterialIconFont)" LogicalName="NE.Standard.UI.Web.Icons.Material.Client.dist.ui-icons-material.woff2" />

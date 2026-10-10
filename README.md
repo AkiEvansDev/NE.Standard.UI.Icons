@@ -83,7 +83,7 @@ The header's language switcher turns the page into Chinese and back; a tile's na
 copies, so they stay as written in every language.
 
 ```
-dotnet run --project examples/DemoApp.Icons.Web     # http://localhost:5300
+dotnet run --project examples/DemoApp.Icons.Web     # http://localhost:5110
 ```
 
 ## Licence

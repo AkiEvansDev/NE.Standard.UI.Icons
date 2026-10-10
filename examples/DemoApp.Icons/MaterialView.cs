@@ -41,7 +41,9 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                 .SetShowClearButton()
                 .BindValue(nameof(IconsController.Search))
                 .SetDebounceMilliseconds(250)
-                .SetWidth(UILayoutLength.Absolute(320))
+                .SetAppearance(UIInputAppearance.Tonal)
+                // The whole line on a phone, so its edge meets the tiles' under it.
+                .SetWidth(UIResponsive<UILayoutLength>.Create(UILayoutLength.Fill(), sm: UILayoutLength.Absolute(320)))
             )
             .AddChild(new SelectComponent(StyleId)
                 .SetOptions([
@@ -49,6 +51,7 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                     new OptionItem { Id = IconsCatalog.OutlinedStyle, Title = "icons-demo.style.outlined" }
                 ])
                 .BindValue(nameof(IconsController.Style))
+                .SetAppearance(UIInputAppearance.Tonal)
                 .SetWidth(UILayoutLength.Absolute(160))
             )
             .AddChild(new TextComponent()
@@ -93,13 +96,14 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                 .AddChild(new ParagraphComponent()
                     .BindDescription(nameof(IconItem.Name), UIBindingScope.Relative)
                     .SetDescriptionType(UITextAppearance.Caption)
+                    // In the tile's ink, over the muted value: a description is muted by default.
+                    .SetDescriptionColor(UIThemeColor.OnSurface)
                     .SetTextAlignment(UITextAlignment.Center)
                 )
                 // Written out rather than in a tooltip, so the value is there for a keyboard, a touch and a reader too.
                 .AddChild(new ParagraphComponent()
                     .BindDescription(nameof(IconItem.Glyph), UIBindingScope.Relative)
                     .SetDescriptionType(UITextAppearance.Caption)
-                    .SetDescriptionColor(UIThemeColor.FromStyle(UIColorStyle.Muted))
                     .SetTextAlignment(UITextAlignment.Center)
                 )
             )
