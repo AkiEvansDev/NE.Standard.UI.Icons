@@ -7,9 +7,12 @@ the font embedded in its assembly and builds a stylesheet from what the applicat
 ## Install
 
 ```
-dotnet add package NE.Standard.UI.Icons.Material
-dotnet add package NE.Standard.UI.Web.Icons.Material
+dotnet add App package NE.Standard.UI.Icons.Material
+dotnet add App.Web package NE.Standard.UI.Web.Icons.Material
 ```
+
+The first is the icons' names, for the application's library; the second their glyphs, for the web project that hosts the
+library ([getting started](https://akievansdev.github.io/NE.Standard/getting-started.html)).
 
 Both packages bring their namespaces as global usings, so the code below needs no `using` line for them; a project
 that sets `NEStandardUIImplicitUsings` to `false` writes its own.
