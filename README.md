@@ -72,6 +72,20 @@ They are `const string`, so the compiler inlines them and a project that only na
 dependency on the names package at all. A pack names glyphs, not meanings: "the icon for deleting" is the
 application's decision, and a `const string` of its own is the place to make it once.
 
+### The framework's glyphs in the application's drawing
+
+The framework's own marks — a standard action's glyph, a dialog's ×, anything named by `UIGlyphs` — draw in its own face, mostly
+filled. An application drawing outlined icons maps the ones it shows onto the pack, once, at startup:
+
+```csharp
+services.MapUIGlyph(UIGlyphs.Copy, MaterialIcons.Outlined(MaterialIcons.ContentCopy));
+services.MapUIGlyph(UIGlyphs.Delete, MaterialIcons.Outlined(MaterialIcons.Delete));
+```
+
+Every place the glyph is an icon value follows, on the first paint and every update. The target needs no registration of its own,
+only the pack; a name the pack does not know fails the startup. A mark the framework's stylesheet draws itself (a select's chevron)
+keeps the framework's face.
+
 ## The demo
 
 Every name in the set, read off the package itself so it cannot fall behind the table it documents, with a

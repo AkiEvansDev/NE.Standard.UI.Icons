@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using NE.Standard.UI.Web.Abstractions.Assets;
+using NE.Standard.UI.Web.Abstractions.Theming;
 
 namespace NE.Standard.UI.Web.Icons.Material;
 
@@ -76,6 +77,9 @@ public static class MaterialWebIconExtensions
         };
 
         _ = services.AddSingleton(font);
+
+        // What a framework glyph mapped onto one of the pack's (MapUIGlyph) is drawn by.
+        _ = services.AddSingleton<IWebIconPack>(new MaterialWebIconPack());
 
         // A factory, so the stylesheet is written after every AddMaterialWebIcons call has had its say rather
         // than at the first.

@@ -80,10 +80,20 @@ internal static class MaterialIconStylesheet
 
     /// <summary>One glyph's rule: the properties <c>.ui-icon::before</c> reads (MECHANISMS §7).</summary>
     private static void AppendRule(StringBuilder builder, string name, string suffix, int fill)
-        => builder
+    {
+        _ = builder
             .Append('.')
             .Append(WebIconClassName.FromIconName(MaterialIconNames.Prefix + name + suffix))
-            .Append(" { --ui-icon-font: \"")
+            .Append(" { ");
+
+        AppendDeclarations(builder, name, fill);
+        _ = builder.AppendLine("}");
+    }
+
+    /// <summary>The declarations of one glyph's rule, which a framework glyph mapped onto it restates too (<see cref="MaterialWebIconPack"/>).</summary>
+    public static void AppendDeclarations(StringBuilder builder, string name, int fill)
+        => builder
+            .Append("--ui-icon-font: \"")
             .Append(FontFamily)
             .Append("\"; --ui-icon-glyph: \"")
             // The ligature is the glyph's own name, underscores and all; the class carries the hyphenated
@@ -91,5 +101,5 @@ internal static class MaterialIconStylesheet
             .Append(name.Replace('-', '_'))
             .Append("\"; --ui-icon-fill: ")
             .Append(fill.ToString(CultureInfo.InvariantCulture))
-            .AppendLine("; }");
+            .Append("; ");
 }
