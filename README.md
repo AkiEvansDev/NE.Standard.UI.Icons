@@ -19,7 +19,7 @@ that sets `NEStandardUIImplicitUsings` to `false` writes its own.
 
 | Set | Drawing | Glyphs | Names | Web |
 |---|---|---|---|---|
-| [Material Symbols](https://fonts.google.com/icons) | Rounded, filled and outlined | 3 927 | [`NE.Standard.UI.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Material) | [`NE.Standard.UI.Web.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Material) |
+| [Material Symbols](https://fonts.google.com/icons) | Rounded, filled and outlined | 3 929 | [`NE.Standard.UI.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Material) | [`NE.Standard.UI.Web.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Material) |
 
 The set is complete, and the package ships no stylesheet: the whole of it written out would be over half a megabyte
 of CSS per drawing, over a megabyte for both, while an application draws tens of glyphs. The font ships in the

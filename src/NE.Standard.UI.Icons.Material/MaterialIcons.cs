@@ -1827,7 +1827,6 @@ public static partial class MaterialIcons
     public const string Imagesmode = "ms-imagesmode";
     public const string Immunology = "ms-immunology";
     public const string ImportContacts = "ms-import-contacts";
-    public const string ImportSpark = "ms-import-spark";
     public const string ImportantDevices = "ms-important-devices";
     public const string InHomeMode = "ms-in-home-mode";
     public const string InactiveOrder = "ms-inactive-order";
@@ -2067,10 +2066,14 @@ public static partial class MaterialIcons
     public const string LogoDev = "ms-logo-dev";
     public const string Logout = "ms-logout";
     public const string Looks = "ms-looks";
+    public const string Looks0 = "ms-looks-0";
     public const string Looks3 = "ms-looks-3";
     public const string Looks4 = "ms-looks-4";
     public const string Looks5 = "ms-looks-5";
     public const string Looks6 = "ms-looks-6";
+    public const string Looks7 = "ms-looks-7";
+    public const string Looks8 = "ms-looks-8";
+    public const string Looks9 = "ms-looks-9";
     public const string LooksOne = "ms-looks-one";
     public const string LooksTwo = "ms-looks-two";
     public const string Loupe = "ms-loupe";
@@ -2123,7 +2126,6 @@ public static partial class MaterialIcons
     public const string MarkdownCopy = "ms-markdown-copy";
     public const string MarkdownDocument = "ms-markdown-document";
     public const string MarkdownPaste = "ms-markdown-paste";
-    public const string MarkdownSpark = "ms-markdown-spark";
     public const string MarkunreadMailbox = "ms-markunread-mailbox";
     public const string MaskedTransitions = "ms-masked-transitions";
     public const string MaskedTransitionsAdd = "ms-masked-transitions-add";
