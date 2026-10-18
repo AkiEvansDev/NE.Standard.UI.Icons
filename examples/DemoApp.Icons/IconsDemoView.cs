@@ -11,9 +11,9 @@ public abstract class IconsDemoView : UIViewBase
     /// <summary>The sidebar's authored id, stable across renders.</summary>
     private const string SidebarId = "icons-sidebar";
 
-    private static readonly (string Route, string Label)[] Pages =
+    private static readonly (string Route, string Label, string Icon)[] Pages =
     [
-        (MaterialRoute, "icons-demo.material.title")
+        (MaterialRoute, "icons-demo.material.title", MaterialIcons.Interests)
     ];
 
     /// <summary>The title band and the sidebar stand, the sidebar from the top of the page; the content scrolls by itself.</summary>
@@ -41,7 +41,7 @@ public abstract class IconsDemoView : UIViewBase
         MenuItem[] entries = new MenuItem[Pages.Length];
 
         for (var i = 0; i < Pages.Length; i++)
-            entries[i] = new MenuItem { Id = Pages[i].Route, Title = Pages[i].Label, Url = Pages[i].Route, Selected = Pages[i].Route == Route };
+            entries[i] = new MenuItem { Id = Pages[i].Route, Title = Pages[i].Label, Icon = MaterialIcons.Outlined(Pages[i].Icon), Url = Pages[i].Route, Selected = Pages[i].Route == Route };
 
         // The width sits on the menu, not the container.
         return new ContainerComponent()
