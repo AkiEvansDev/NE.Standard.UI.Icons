@@ -13,7 +13,7 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
 
     protected override string Route => MaterialRoute;
 
-    public override string Title => "icons-demo.material.title";
+    protected override string Header => "icons-demo.material.title";
 
     protected override string Description => "icons-demo.material.description";
 
@@ -37,9 +37,9 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
             .SetMargin(UIThickness.All(0, 0, 0, 12))
             .AddChild(new TextInputComponent(SearchId)
                 .SetSearch("icons-demo.search.placeholder")
-                .BindValue(nameof(IconsController.Search))
+                .BindValue<IconsController>(static c => c.Search)
                 .SetDebounceMilliseconds(250)
-                .SetAppearance(UIInputAppearance.Tonal)
+                .SetAppearance(UIInputAppearance.Filled)
                 // The whole line on a phone, so its edge meets the tiles' under it.
                 .SetWidth(UIResponsive<UILayoutLength>.Create(UILayoutLength.Fill(), sm: UILayoutLength.Absolute(320)))
             )
@@ -48,21 +48,20 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                     new OptionItem { Id = IconsCatalog.FilledStyle, Title = "icons-demo.style.filled" },
                     new OptionItem { Id = IconsCatalog.OutlinedStyle, Title = "icons-demo.style.outlined" }
                 ])
-                .BindValue(nameof(IconsController.Style))
-                .SetAppearance(UIInputAppearance.Tonal)
+                .BindValue<IconsController>(static c => c.Style)
+                .SetAppearance(UIInputAppearance.Filled)
                 .SetWidth(UILayoutLength.Absolute(160))
             )
-            .AddChild(new TextComponent()
-                .BindTitle($"{nameof(IconsController.Icons)}.{nameof(IconsSource.Caption)}")
-                .SetTitleType(UITextAppearance.Caption)
-                .SetTitleColor(UIThemeColor.FromStyle(UIColorStyle.Muted))
+            .AddChild(UIText.Caption()
+                .Muted()
+                .BindTitle<IconsController>(static c => c.Icons.Caption)
                 .SetVerticalAlignment(UIAlignment.Center)
             );
 
     /// <summary>The windowed gallery: a hundred tiles at a time, the search and the drawing resolved on the server.</summary>
     private static ItemsViewComponent CreateGallery()
         => new ItemsViewComponent()
-            .BindSource(nameof(IconsController.Icons))
+            .BindSource<IconsController>(static c => c.Icons)
             .SetWindowSize(IconsController.WindowSize)
             .SetLayoutType(UIItemsLayoutType.Wrap)
             .FilterBy(SearchId, IInputComponent.ValueProperty, nameof(IconItem.Name))
@@ -73,26 +72,20 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
             .ConfigureDefaultEmptyTemplate(empty => empty.SetTitle("icons-demo.empty"))
             .FilterBy(StyleId, IInputComponent.ValueProperty, nameof(IconItem.Style), UIComparisonOperator.Equal);
 
-    private static ContainerComponent CreateTile()
-        => new ContainerComponent()
+    private static SurfaceComponent CreateTile()
+        => new SurfaceComponent()
             .SetPadding(UIThickness.Uniform(12))
-            .SetBackground(UIThemeColor.Surface)
-            .SetBorderColor(UIThemeColor.Border)
             .SetBorderThickness(UIThickness.Uniform(1))
             .SetBorderRadius(UICornerRadius.Uniform(8))
-            .AddRow(UIGridUnit.Auto())
-            .AddChild(new StackPanelComponent()
-                .SetOrientation(UIOrientation.Vertical)
+            .SetContent(UILayout.Stack(8)
                 .SetHorizontalAlignment(UIAlignment.Center)
-                .SetSpacing(8)
-                .SetPlacement(1, 1, 24, 1)
                 .AddChild(new IconComponent()
-                    .BindIcon(nameof(IconItem.Glyph), UIBindingScope.Relative)
-                    .SetSize(UIIconSize.Large)
+                    .BindIcon<IconItem>(static item => item.Glyph, UIBindingScope.Relative)
+                    .SetSize(UISize.Large)
                 )
                 // Paragraphs, which wrap: a name or a value cut behind an ellipsis could not be read whole, and it is what an author copies.
                 .AddChild(new ParagraphComponent()
-                    .BindDescription(nameof(IconItem.Name), UIBindingScope.Relative)
+                    .BindDescription<IconItem>(static item => item.Name, UIBindingScope.Relative)
                     .SetDescriptionType(UITextAppearance.Caption)
                     // In the tile's ink, over the muted value: a description is muted by default.
                     .SetDescriptionColor(UIThemeColor.OnSurface)
@@ -100,7 +93,7 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                 )
                 // Written out rather than in a tooltip, so the value is there for a keyboard, a touch and a reader too.
                 .AddChild(new ParagraphComponent()
-                    .BindDescription(nameof(IconItem.Glyph), UIBindingScope.Relative)
+                    .BindDescription<IconItem>(static item => item.Glyph, UIBindingScope.Relative)
                     .SetDescriptionType(UITextAppearance.Caption)
                     .SetTextAlignment(UITextAlignment.Center)
                 )

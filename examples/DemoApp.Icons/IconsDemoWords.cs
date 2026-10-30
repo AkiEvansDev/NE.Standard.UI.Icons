@@ -15,6 +15,7 @@ internal static class IconsDemoWords
 
     private static readonly Dictionary<string, string> English = new(StringComparer.Ordinal)
     {
+        ["icons-demo.title"] = "{page} · NE.Standard.UI.Icons",
         ["icons-demo.material.title"] = "Material Symbols",
         ["icons-demo.material.description"] = "Every name in the set, read off the package itself. A tile's caption is the constant an author writes, and the line under it the value it resolves to.",
         ["icons-demo.search.placeholder"] = "Search by name or glyph…",
@@ -30,6 +31,7 @@ internal static class IconsDemoWords
     // Chinese has one plural form, so a plural key has only its ".other".
     private static readonly Dictionary<string, string> Chinese = new(StringComparer.Ordinal)
     {
+        ["icons-demo.title"] = "{page} · NE.Standard.UI.Icons",
         ["icons-demo.material.title"] = "Material Symbols",
         ["icons-demo.material.description"] = "图标集中的每个名称，直接读取自包本身。图块的标题是作者编写的常量，其下一行是它解析得到的值。",
         ["icons-demo.search.placeholder"] = "按名称或字形搜索…",
