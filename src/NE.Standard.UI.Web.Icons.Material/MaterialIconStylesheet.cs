@@ -18,8 +18,11 @@ internal static class MaterialIconStylesheet
         ArgumentNullException.ThrowIfNull(registration);
         ArgumentException.ThrowIfNullOrWhiteSpace(fontPath);
 
+        if ((registration.Styles & ~(MaterialIconStyle.Fill | MaterialIconStyle.Outlined)) != 0)
+            throw new ArgumentOutOfRangeException(nameof(registration), registration.Styles, "Pass MaterialIconStyle.Fill, Outlined, or both.");
+
         // Only an outlined value draws without a style; the whole set or a plain name beside it would have no rule.
-        if (registration.Styles == 0 && (registration.IncludesEverything || registration.HasPlainName))
+        if ((registration.Styles & (MaterialIconStyle.Fill | MaterialIconStyle.Outlined)) == 0 && (registration.IncludesEverything || registration.HasPlainName))
             throw new InvalidOperationException("The Material icon pack was registered without a style. Pass MaterialIconStyle.Fill, Outlined, or both.");
 
         if (!registration.IncludesEverything && registration.Names.Count == 0)

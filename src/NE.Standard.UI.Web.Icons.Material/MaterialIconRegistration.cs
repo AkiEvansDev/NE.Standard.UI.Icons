@@ -38,6 +38,7 @@ public sealed class MaterialIconRegistration
     public MaterialIconRegistration Add(MaterialIconStyle styles, params string[] names)
     {
         ArgumentNullException.ThrowIfNull(names);
+        ValidateStyles(styles);
 
         Styles |= styles;
 
@@ -57,12 +58,20 @@ public sealed class MaterialIconRegistration
         return this;
     }
 
+    private static void ValidateStyles(MaterialIconStyle styles)
+    {
+        if ((styles & ~(MaterialIconStyle.Fill | MaterialIconStyle.Outlined)) != 0)
+            throw new ArgumentOutOfRangeException(nameof(styles), styles, "Pass MaterialIconStyle.Fill, Outlined, or both.");
+    }
+
     /// <summary>
     /// Serves every glyph the pack knows — for a gallery or a demo, and for an application whose icon names
     /// come from data and so cannot be listed at startup.
     /// </summary>
     public MaterialIconRegistration AddEverything(MaterialIconStyle styles)
     {
+        ValidateStyles(styles);
+
         Styles |= styles;
         IncludesEverything = true;
 
