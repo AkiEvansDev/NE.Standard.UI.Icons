@@ -32,6 +32,40 @@ public sealed class MaterialIconRegistration
     internal bool HasPlainName { get; private set; }
 
     /// <summary>
+    /// Adds glyphs named by the <c>MaterialIcons</c> constants (an unknown one fails the startup), defaulting plain names to
+    /// <see cref="MaterialIconStyle.Fill"/> while an outlined value serves that glyph's outlined drawing alone.
+    /// </summary>
+    public MaterialIconRegistration Add(params string[] names)
+    {
+        ArgumentNullException.ThrowIfNull(names);
+
+        var hasPlain = names.Length == 0;
+
+        foreach (var name in names)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+
+            var glyph = Normalize(name, out var outlined);
+            _ = _names.Add(glyph);
+
+            if (outlined)
+            {
+                _ = _outlinedNames.Add(glyph);
+            }
+            else
+            {
+                HasPlainName = true;
+                hasPlain = true;
+            }
+        }
+
+        if (hasPlain)
+            Styles |= MaterialIconStyle.Fill;
+
+        return this;
+    }
+
+    /// <summary>
     /// Adds glyphs named by the <c>MaterialIcons</c> constants (an unknown one fails the startup); an outlined value serves that
     /// glyph's outlined drawing, not every name's.
     /// </summary>

@@ -44,6 +44,7 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
                 .SetWidth(UIResponsive<UILayoutLength>.Create(UILayoutLength.Fill(), sm: UILayoutLength.Absolute(320)))
             )
             .AddChild(new SelectComponent(StyleId)
+                .SetAccessibleName("icons-demo.style")
                 .SetOptions([
                     new OptionItem { Id = IconsCatalog.FilledStyle, Title = "icons-demo.style.filled" },
                     new OptionItem { Id = IconsCatalog.OutlinedStyle, Title = "icons-demo.style.outlined" }
@@ -61,16 +62,17 @@ internal sealed class MaterialView : IconsDemoView, IUIViewDefinition
     /// <summary>The windowed gallery: a hundred tiles at a time, the search and the drawing resolved on the server.</summary>
     private static ItemsViewComponent CreateGallery()
         => new ItemsViewComponent()
+            .SetAccessibleName("icons-demo.material.title")
             .BindSource<IconsController>(static c => c.Icons)
             .SetWindowSize(IconsController.WindowSize)
             .SetLayoutType(UIItemsLayoutType.Wrap)
-            .FilterBy(SearchId, IInputComponent.ValueProperty, nameof(IconItem.Name))
+            .FilterBy<IconItem>(SearchId, IInputComponent.ValueProperty, static item => item.Name)
             .VerticalScrollOnly()
             .SetSpacing(12)
             .SetHeight(UILayoutLength.Fill())
             .SetTemplate(CreateTile())
             .ConfigureDefaultEmptyTemplate(empty => empty.SetTitle("icons-demo.empty"))
-            .FilterBy(StyleId, IInputComponent.ValueProperty, nameof(IconItem.Style), UIComparisonOperator.Equal);
+            .FilterBy<IconItem>(StyleId, IInputComponent.ValueProperty, static item => item.Style, UIComparisonOperator.Equal);
 
     private static SurfaceComponent CreateTile()
         => new SurfaceComponent()

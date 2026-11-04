@@ -35,7 +35,13 @@ public static class MaterialWebIconExtensions
 
     /// <inheritdoc cref="AddMaterialWebIcons(IServiceCollection, MaterialIconStyle, string[])"/>
     public static IServiceCollection AddMaterialWebIcons(this IServiceCollection services, params string[] names)
-        => services.AddMaterialWebIcons(MaterialIconStyle.Fill, names);
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        _ = Register(services).Add(names);
+
+        return services;
+    }
 
     /// <summary>
     /// Serves the whole set — for a gallery, or when icon names come from data and can't be named at
