@@ -869,7 +869,10 @@ public static partial class MaterialIcons
     public const string ContractDelete = "ms-contract-delete";
     public const string ContractEdit = "ms-contract-edit";
     public const string Contrast = "ms-contrast";
+    public const string ContrastAuto = "ms-contrast-auto";
     public const string ContrastCircle = "ms-contrast-circle";
+    public const string ContrastInverse = "ms-contrast-inverse";
+    public const string ContrastInverseAuto = "ms-contrast-inverse-auto";
     public const string ContrastRtlOff = "ms-contrast-rtl-off";
     public const string ContrastSquare = "ms-contrast-square";
     public const string ControlCamera = "ms-control-camera";
@@ -1026,6 +1029,7 @@ public static partial class MaterialIcons
     public const string DeviceSwooshStar = "ms-device-swoosh-star";
     public const string DeviceThermostat = "ms-device-thermostat";
     public const string Devices = "ms-devices";
+    public const string Devices2 = "ms-devices-2";
     public const string DevicesFold = "ms-devices-fold";
     public const string DevicesFold2 = "ms-devices-fold-2";
     public const string DevicesOff = "ms-devices-off";
@@ -1093,6 +1097,7 @@ public static partial class MaterialIcons
     public const string DocumentScanner = "ms-document-scanner";
     public const string DocumentSearch = "ms-document-search";
     public const string DocumentShare = "ms-document-share";
+    public const string DocumentShareStack = "ms-document-share-stack";
     public const string Domain = "ms-domain";
     public const string DomainAdd = "ms-domain-add";
     public const string DomainDisabled = "ms-domain-disabled";
@@ -1853,6 +1858,7 @@ public static partial class MaterialIcons
     public const string Inpatient = "ms-inpatient";
     public const string Input = "ms-input";
     public const string InputCircle = "ms-input-circle";
+    public const string InputSearch = "ms-input-search";
     public const string InsertChart = "ms-insert-chart";
     public const string InsertPageBreak = "ms-insert-page-break";
     public const string InsertText = "ms-insert-text";
@@ -2098,6 +2104,7 @@ public static partial class MaterialIcons
     public const string MailAsterisk = "ms-mail-asterisk";
     public const string MailLock = "ms-mail-lock";
     public const string MailOff = "ms-mail-off";
+    public const string MailPerson = "ms-mail-person";
     public const string MailShield = "ms-mail-shield";
     public const string Male = "ms-male";
     public const string Man = "ms-man";
@@ -2180,6 +2187,7 @@ public static partial class MaterialIcons
     public const string Minimize = "ms-minimize";
     public const string MinorCrash = "ms-minor-crash";
     public const string Mintmark = "ms-mintmark";
+    public const string MirrorStack = "ms-mirror-stack";
     public const string MissedVideoCall = "ms-missed-video-call";
     public const string MissingController = "ms-missing-controller";
     public const string Mist = "ms-mist";
@@ -2605,6 +2613,7 @@ public static partial class MaterialIcons
     public const string PersonCelebrate = "ms-person-celebrate";
     public const string PersonCheck = "ms-person-check";
     public const string PersonEdit = "ms-person-edit";
+    public const string PersonEye = "ms-person-eye";
     public const string PersonHeart = "ms-person-heart";
     public const string PersonOff = "ms-person-off";
     public const string PersonPin = "ms-person-pin";
@@ -2762,6 +2771,7 @@ public static partial class MaterialIcons
     public const string PublicOff = "ms-public-off";
     public const string Publish = "ms-publish";
     public const string PublishedWithChanges = "ms-published-with-changes";
+    public const string PullRequest = "ms-pull-request";
     public const string Pulmonology = "ms-pulmonology";
     public const string PulseAlert = "ms-pulse-alert";
     public const string PunchClock = "ms-punch-clock";
@@ -3244,6 +3254,7 @@ public static partial class MaterialIcons
     public const string Speed2x = "ms-speed-2x";
     public const string Speed3 = "ms-speed-3";
     public const string Speed4 = "ms-speed-4";
+    public const string Speed4Progress = "ms-speed-4-progress";
     public const string SpeedCamera = "ms-speed-camera";
     public const string Spellcheck = "ms-spellcheck";
     public const string SplitScene = "ms-split-scene";

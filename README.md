@@ -19,11 +19,11 @@ that sets `NEStandardUIImplicitUsings` to `false` writes its own.
 
 | Set | Drawing | Glyphs | Names | Web |
 |---|---|---|---|---|
-| [Material Symbols](https://fonts.google.com/icons) | Rounded, filled and outlined | 3 929 | [`NE.Standard.UI.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Material) | [`NE.Standard.UI.Web.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Material) |
+| [Material Symbols](https://fonts.google.com/icons) | Rounded, filled and outlined | 3 940 | [`NE.Standard.UI.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Icons.Material) | [`NE.Standard.UI.Web.Icons.Material`](https://www.nuget.org/packages/NE.Standard.UI.Web.Icons.Material) |
 
 The set is complete, and the package ships no stylesheet: the whole of it written out would be over half a megabyte
 of CSS per drawing, over a megabyte for both, while an application draws tens of glyphs. The font ships in the
-assembly instead — every glyph, 386 KB, preloaded by every page's head and cached for a year under its versioned address, so a
+assembly instead — every glyph, 387 KB, preloaded by every page's head and cached for a year under its versioned address, so a
 glyph is not a blank box on a cold load — and the stylesheet a browser receives names only what the application registered.
 
 The two drawings are one font, told apart by its `FILL` axis. A filled glyph survives being asked for at 12 or 14

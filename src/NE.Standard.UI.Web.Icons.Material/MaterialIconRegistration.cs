@@ -13,8 +13,8 @@ namespace NE.Standard.UI.Web.Icons.Material;
 /// </remarks>
 public sealed class MaterialIconRegistration
 {
-    private readonly HashSet<string> _names = new(StringComparer.Ordinal);
-    private readonly HashSet<string> _outlinedNames = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _names = [with(StringComparer.Ordinal)];
+    private readonly HashSet<string> _outlinedNames = [with(StringComparer.Ordinal)];
 
     /// <summary>Whether the application asked for the whole set rather than naming glyphs.</summary>
     public bool IncludesEverything { get; private set; }
