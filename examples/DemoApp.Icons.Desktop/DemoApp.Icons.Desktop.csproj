@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net11.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoApp.Icons\DemoApp.Icons.csproj" />
+    <ProjectReference Include="..\..\src\NE.Standard.UI.Web.Icons.Material\NE.Standard.UI.Web.Icons.Material.csproj" />
+  </ItemGroup>
+
+  <!-- See DemoApp.Icons.csproj: sources in the monorepo, packages in a mirror. -->
+  <ItemGroup Condition="'$(InMonorepo)' == 'true'">
+    <ProjectReference Include="..\..\..\..\src\Platforms\Desktop\NE.Standard.UI.Desktop\NE.Standard.UI.Desktop.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Platforms\Web\NE.Standard.UI.Web.Renderers\NE.Standard.UI.Web.Renderers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(InMonorepo)' != 'true'">
+    <PackageReference Include="NE.Standard.UI.Desktop" Version="$(DesktopVersion)" />
+    <PackageReference Include="NE.Standard.UI.Web.Renderers" Version="$(CoreVersion)" />
+  </ItemGroup>
+
+</Project>

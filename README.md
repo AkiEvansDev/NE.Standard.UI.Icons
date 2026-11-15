@@ -100,7 +100,8 @@ The header's language switcher turns the page into Chinese and back; a tile's na
 copies, so they stay as written in every language.
 
 ```
-dotnet run --project examples/DemoApp.Icons.Web     # http://localhost:5110
+dotnet run --project examples/DemoApp.Icons.Web        # http://localhost:5110
+dotnet run --project examples/DemoApp.Icons.Desktop    # Windows WebView2 desktop window
 ```
 
 ## Licence
