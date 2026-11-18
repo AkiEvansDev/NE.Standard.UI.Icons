@@ -12,6 +12,10 @@
     <ProjectReference Include="..\..\src\NE.Standard.UI.Web.Icons.Material\NE.Standard.UI.Web.Icons.Material.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\DemoApp.Icons.Web\IconsWebServices.cs" Link="IconsWebServices.cs" />
+  </ItemGroup>
+
   <!-- See DemoApp.Icons.csproj: sources in the monorepo, packages in a mirror. -->
   <ItemGroup Condition="'$(InMonorepo)' == 'true'">
     <ProjectReference Include="..\..\..\..\src\Platforms\Desktop\NE.Standard.UI.Desktop\NE.Standard.UI.Desktop.csproj" />

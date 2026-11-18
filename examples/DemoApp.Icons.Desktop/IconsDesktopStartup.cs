@@ -1,4 +1,5 @@
 using System;
+using DemoApp.Icons.Web;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DemoApp.Icons.Desktop;
@@ -14,10 +15,5 @@ internal sealed class IconsDesktopStartup : DesktopStartupBase<IconsAppStartup>
     }
 
     protected override void ConfigureServices(IServiceCollection services)
-    {
-        ArgumentNullException.ThrowIfNull(services);
-
-        _ = services.AddStandardRenderers();
-        _ = services.AddMaterialWebIcons(MaterialIconScope.All, MaterialIconStyle.Fill | MaterialIconStyle.Outlined);
-    }
+        => IconsWebServices.Register(services);
 }
